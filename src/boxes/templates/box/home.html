@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ box }}{% endblock %}
+
+{% block content %}
+<h3>{{ box }}</h3>
+
+<form method='post' action=''>
+    <input type='text' name='idea' placeholder='Enter a new idea here' />
+    <input type='submit' value='post'>
+</form>
+{% endblock %}

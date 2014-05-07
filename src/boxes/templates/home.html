@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method='post' action=''>
+<h3>Create an idea box</h3>
+{% csrf_token %}
+<input type='text' name='name' placeholder='Enter box name here'/>
+<input type='submit' value='Create'/>
+</form>
+{% endblock %}
