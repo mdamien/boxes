@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
 
 {% block content %}
-<form method='post' action=''>
+<form method='post' action='' class='new-box'>
 <h3>Create an idea box</h3>
 {% csrf_token %}
 <input type='text' name='name' placeholder='Enter box name here'/>

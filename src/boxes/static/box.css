@@ -1,0 +1,120 @@
+body{
+    background:#f2f2f2;
+    padding: 0;
+}
+
+.row {
+    max-width:600px;
+    margin:auto;    
+    padding:4px;
+}
+
+.ideas {
+   list-style:none; 
+}
+
+.idea {
+    
+}
+
+.box-name a{
+    color:#222;
+}
+
+.box-name a:hover{
+    text-decoration:none;
+}
+
+.header {
+background: #498FDD;
+}
+
+.header a {
+color:white;
+}
+
+.idea-form {
+    background: #fff;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5; 
+    border-radius: 3px; 
+    margin:2px; 
+    display: inline-block;
+    padding: 5px 10px;
+    margin-top: 15px;
+    margin-bottom: 18px;
+}
+
+.idea-form input[name="title"] {
+    border: none;
+    width: 260px;
+}
+.idea-form input[name="title"]:focus{
+    outline:none;
+}
+
+.idea-form input[type="submit"] {
+    background: #FFA51A;
+    border: none;
+    padding: 5px 14px;
+    color: white;
+    border-radius: 6px;
+}
+.pages {
+    list-style: none;
+    margin: 0;
+    border-bottom: 1px solid rgb(213, 213, 213);
+}
+.pages li {
+    display: inline-block;
+    background: rgb(214, 214, 214);
+    color: rgb(117, 117, 117);
+    padding: 0px 7px;
+    border-radius: 0 8px 0 0;
+    z-index: 0;
+    position: relative;
+    margin-left: -6px;
+}
+
+
+.pages .active {
+    color: white;
+    background: #498FDD;
+    margin-left: 0;
+    z-index: 2;
+}
+
+.idea {
+    background: #fff;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-radius: 3px;
+    margin: 2px;
+    padding: 5px 10px;
+}
+
+.vote-box {
+    background: rgba(189, 189, 189, 0.15);
+    color: rgb(148, 148, 148);
+    float: left;
+    margin-right: 8px;
+    padding: 0 1px;
+}
+.idea-title {
+    color: inherit;
+}
+.vote-box a {
+    color: rgb(170, 170, 170);
+    font-size: 13px;
+    display: inline-block;
+    vertical-align: text-bottom;
+    cursor:pointer;
+}
+.vote-up:hover, .vote-up.current-vote {
+    text-decoration: none;
+    color: #5EEF19;
+}
+.vote-down:hover, .vote-down.current-vote {
+    text-decoration: none; 
+    color: #F71945;
+}

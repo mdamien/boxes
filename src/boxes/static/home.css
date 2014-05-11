@@ -1,0 +1,32 @@
+.new-box {
+margin: auto;
+width: 400px;
+text-align: center;
+background: #72A9E5;
+padding: 20px;
+margin-top: 40px;
+border-bottom: 7px solid #498FDD;
+border-radius: 13px;
+}
+
+h3 {
+color: #FFFFFF;
+}
+input[type="text"]{
+height: 43px;
+font-size: 1.9rem;
+border: none;
+padding: 11px;
+}
+
+input[type="submit"]{
+font-weight: bold;
+margin-top: 12px;
+font-size: 2rem;
+background: #0A67CF;
+border-radius: 8px;
+border: none;
+padding: 6px 19px;
+border-bottom: 4px solid #498FDD;
+color: #FFFFFF;
+}

@@ -5,12 +5,13 @@
     <title>{% block title %}Idea Box{% endblock %}</title>
     {% block css %}
     <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'box.css' %}">
     {% endblock %}
 </head>
 <body>
     {% block content %}{% endblock %}
     {% block js %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="{% static 'jq.js' %}"></script>
     {% endblock %}
 </body>
 </html>

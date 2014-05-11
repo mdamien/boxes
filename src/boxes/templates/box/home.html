@@ -1,12 +1,29 @@
-{% extends 'base.html' %}
+{% extends 'box/base.html' %}
 
-{% block title %}{{ box }}{% endblock %}
-
-{% block content %}
-<h3>{{ box }}</h3>
-
-<form method='post' action=''>
-    <input type='text' name='idea' placeholder='Enter a new idea here' />
-    <input type='submit' value='post'>
+{% block box %}
+<form class='idea-form' method='post' action=''>
+    {% csrf_token %}
+    <input type='text' name='title' placeholder='Enter a new idea here' />
+    <input type='submit' value='post' name='submit_idea'>
 </form>
+<br/>
+<ul class='pages'>
+<li class='active'>Top</li><li>New</span>
+</ul>
+<ol class='ideas'>
+{% for idea in ideas %}
+<li class='idea' id='idea-{{idea.pk}}'>
+    <div class='vote-box'>
+        <a onclick="vote('up',{{ idea.pk }},'{% url 'boxes.views.vote' box.pk idea.pk 'up' %}')" class='vote-up'>&#9650;</a>
+        {{ idea.score }}
+        <a onclick="vote('down',{{ idea.pk }},'{% url 'boxes.views.vote' box.pk idea.pk 'down' %}')" class='vote-down'>&#9660;</a>
+    </div>
+    <a class='idea-title' href='{{ idea.url }}'>{{ idea.title }}</a>
+</li>
+{% endfor %}
+<ol>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
 {% endblock %}
