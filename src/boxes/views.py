@@ -1,8 +1,7 @@
 from django.shortcuts import get_object_or_404,render
-from django.http import HttpResponseRedirect
-from boxes.models import Box, Idea
+from django.http import HttpResponseRedirect, HttpResponse
+from boxes.models import Box, Idea, Vote
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
 import random
 
 def idea(request, box_pk, idea_pk):
@@ -12,32 +11,33 @@ def idea(request, box_pk, idea_pk):
         'box':idea.box
     })
 
-def vote_to_int(vote):
-    return {'up':1,'down':-1}[vote]
-
 @require_POST
-@csrf_exempt
 def vote(request, box_pk, idea_pk, vote):
     idea = get_object_or_404(Idea, pk=idea_pk)
-    votes = request.session.get('votes', {})
-    if idea_pk in votes:
-        idea.score -= vote_to_int(votes[idea.pk])
-    votes[idea_pk] = vote
-    idea.score += vote_to_int(vote)
-    idea.save()
-    request.session['votes'] = votes
+    session_key = request.session.session_key
+    try:
+        current_vote = Vote.objects.get(session_key=session_key, idea=idea)
+        current_vote.delete()
+    except Vote.DoesNotExist:
+        pass
+    vote = Vote(idea=idea, session_key=session_key, vote=Vote.from_str(vote))
+    vote.save()
+    return HttpResponse(str(idea.score()))
 
 def box(request, box_pk):
     box = get_object_or_404(Box, pk=box_pk)
-    ideas = Idea.objects.filter(box=box).order_by('-score')
+    ideas = Idea.objects.filter(box=box) #.order_by('-score')
     if request.method == 'POST':
-        if 'submit_idea' in request.POST:
-            idea = Idea(box=box, title=request.POST.get('title'))
-            idea.save()
-    votes = request.session.get('votes',{})
+        idea = Idea(box=box, title=request.POST.get('title'))
+        idea.save()
+    
+    #add current vote
+    session_key = request.session.session_key
     for idea in ideas:
-        if idea.pk in votes:
-            idea.user_vote = votes.get(idea.pk)
+        vote = Vote.objects.filter(idea=idea,session_key=session_key).first()
+        if vote:
+            idea.user_vote = vote.vote
+
     return render(request,'box/home.html',{
         'box':box,    
         'ideas':ideas,

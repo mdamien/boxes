@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 
 idea = patterns('boxes.views',
-    url(r'$', 'idea'),
     url(r'vote/(?P<vote>[a-z]+)/$','vote'),
+    url(r'$', 'idea'),
 )
 
 box = patterns('boxes.views',
