@@ -3,12 +3,8 @@
 {% block title %}{{ box }} - {{ idea.title }}{% endblock %}
 
 {% block box %}
-<div class='idea-full'>
-    <h4>{{ idea.title }}</h4>
-    <p>{{ idea.content|linebreaks }}</p>
-</div>
-<br/>
-<h5>Comments</h5>
+{% include 'box/_idea.html' with full=True %}
+<h5>Comments (coming soon)</h5>
 <form method='post' action=''>
     {% csrf_token %}
     <input type='text' name='comment' placeholder='Enter a comment here' />

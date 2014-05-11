@@ -3,8 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.utils import timezone
-import random, datetime
+import random
 
 def idea(request, box_pk, idea_pk):
     idea = get_object_or_404(Idea, pk=idea_pk)
@@ -12,6 +11,13 @@ def idea(request, box_pk, idea_pk):
         'idea':idea, 
         'box':idea.box
     })
+
+@require_POST
+def delete_idea(request, box_pk, idea_pk):
+    box = get_object_or_404(Box, pk=box_pk)
+    idea = get_object_or_404(Idea, pk=idea_pk)
+    idea.delete()
+    return HttpResponseRedirect(box.url())
 
 @require_POST
 def vote(request, box_pk, idea_pk, vote):
@@ -35,18 +41,14 @@ def box(request, box_pk, sort='top'):
     elif sort == 'new':
         ideas = ideas.order_by('-date')
     
+    session_key = request.session.session_key
+    
     if request.method == 'POST':
-        last_idea = Idea.objects.last()
-        #rate limit
-        if not last_idea or last_idea.date < timezone.now() - datetime.timedelta(seconds=1):
-            idea = Idea(box=box, title=request.POST.get('title'))
-            idea.save()
-        else:
-            raise Exception('rate limit')#todo: user friendly message
-        #todo: redirect to idea
+        idea = Idea(box=box, title=request.POST.get('title'), session_key=session_key)
+        idea.save()
 
     #pagination
-    paginator = Paginator(ideas, 100)
+    paginator = Paginator(ideas, 10)
     page = request.GET.get('page')
     try:
         ideas = paginator.page(page)
@@ -56,7 +58,6 @@ def box(request, box_pk, sort='top'):
         ideas = paginator.page(paginator.num_pages)
 
     #add user current vote
-    session_key = request.session.session_key
     votes = Vote.objects.filter(session_key=session_key)
     for idea in ideas:
         for vote in votes:

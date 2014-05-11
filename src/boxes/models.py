@@ -17,6 +17,7 @@ class Idea(models.Model):
     content = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)
     cached_score = models.IntegerField(default=0)
+    session_key = models.CharField(max_length=40)
 
     def score(self):
         return self.cached_score

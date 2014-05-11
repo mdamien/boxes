@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 
 idea = patterns('boxes.views',
     url(r'vote/(?P<vote>[a-z]+)/$','vote'),
+    url(r'delete/$','delete_idea'),
     url(r'$', 'idea'),
 )
 

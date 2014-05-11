@@ -149,3 +149,14 @@ border-radius: 3px;
     text-decoration:none;
     color:rgb(27, 27, 27);
 }
+
+.delete-form {
+    display:inline;
+    float:right;
+}
+
+.delete-form input[type="submit"] {
+    color: #CF0029;
+    border: none;
+    background: none;
+}

@@ -16,21 +16,10 @@
 </ul>
 <ol class='ideas'>
 {% for idea in ideas %}
-<li class='idea' id='idea-{{idea.pk}}'>
-    <div class='vote-box'>
-        <a onclick="vote('up',{{ idea.pk }},'{% url 'boxes.views.vote' box.pk idea.pk 'up' %}')" class='vote-up
-            {% if idea.user_vote == 1 %}current-vote{% endif %}'
-            >&#9650;</a>
-        <span class='score'>{{ idea.score }}</span>{{ idea.user_vote.vote }}
-        <a onclick="vote('down',{{ idea.pk }},'{% url 'boxes.views.vote' box.pk idea.pk 'down' %}')" class='vote-down
-            {% if idea.user_vote == -1 %}current-vote{% endif %}'
-            >&#9660;</a>
-    </div>
-    <a class='idea-title' href='{{ idea.url }}'>{{ idea.title }}</a>
-</li>
+{% include 'box/_idea.html' %}
 {% endfor %}
 </ul>
-{% if ideas.num_pages > 1 %}
+{% if ideas.paginator.num_pages > 1 %}
 <div class="pagination">
     <span class="step-links">
         {% if ideas.has_previous %}
