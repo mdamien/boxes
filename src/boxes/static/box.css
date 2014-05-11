@@ -126,3 +126,26 @@ color:white;
     text-decoration: none; 
     color: #F71945;
 }
+
+.pagination {
+    text-align: right;
+}
+.step-links {
+background: rgb(245, 245, 245);
+color: rgb(145, 145, 145);
+font-size: 14px;
+padding: 0px 6px;
+margin-right: 3px;
+display: inline-block;
+position: relative;
+border: 1px solid;
+border-color: #DBDBDB #D5D5D5 #C7C7C7;
+border-radius: 3px;
+}
+.step-links a {
+    color: rgb(143, 143, 143);
+}
+.step-links a:hover {
+    text-decoration:none;
+    color:rgb(27, 27, 27);
+}

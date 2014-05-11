@@ -1,6 +1,6 @@
 # Release 0.1
 
-[ ] Pagination
+[x] Pagination
 [ ] Posting rate limitation
 
 # Release 0.2

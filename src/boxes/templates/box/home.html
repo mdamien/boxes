@@ -29,7 +29,22 @@
     <a class='idea-title' href='{{ idea.url }}'>{{ idea.title }}</a>
 </li>
 {% endfor %}
-<ol>
+</ul>
+<div class="pagination">
+    <span class="step-links">
+        {% if ideas.has_previous %}
+            <a href="?page={{ ideas.previous_page_number }}">&#5176;</a>
+        {% endif %}
+
+        <span class="current">
+            {{ ideas.number }}/{{ ideas.paginator.num_pages }}
+        </span>
+
+        {% if ideas.has_next %}
+            <a href="?page={{ ideas.next_page_number }}">&#5171;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
 
 {% block js %}
