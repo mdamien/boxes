@@ -14,7 +14,7 @@ body{
 }
 
 .idea {
-    
+   overflow: auto; 
 }
 
 .box-name a{
@@ -104,9 +104,9 @@ color:white;
 .vote-box {
     background: rgba(189, 189, 189, 0.15);
     color: rgb(148, 148, 148);
-    float: left;
     margin-right: 8px;
     padding: 0 1px;
+    display:inline-block;
 }
 .idea-title {
     color: inherit;

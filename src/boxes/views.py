@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import random
+from django.utils import timezone
+import random, datetime
 
 def idea(request, box_pk, idea_pk):
     idea = get_object_or_404(Idea, pk=idea_pk)
@@ -30,13 +31,18 @@ def box(request, box_pk, sort='top'):
     box = get_object_or_404(Box, pk=box_pk)
     ideas = Idea.objects.filter(box=box)
     if sort is 'top':
-        ideas = ideas.order_by('-cached_score')
+        ideas = ideas.order_by('-cached_score','-date')
     elif sort == 'new':
         ideas = ideas.order_by('-date')
     
     if request.method == 'POST':
-        idea = Idea(box=box, title=request.POST.get('title'))
-        idea.save()
+        last_idea = Idea.objects.last()
+        #rate limit
+        if not last_idea or last_idea.date < timezone.now() - datetime.timedelta(seconds=1):
+            idea = Idea(box=box, title=request.POST.get('title'))
+            idea.save()
+        else:
+            raise Exception('rate limit')#todo: user friendly message
         #todo: redirect to idea
 
     #pagination
@@ -65,6 +71,7 @@ def box(request, box_pk, sort='top'):
 
 def home(request):
     if request.method == 'POST':
+        #todo: proper form handling
         box = Box(pk=random.randint(1,100000),name=request.POST.get('name'))
         box.save()
         return HttpResponseRedirect(box.url())

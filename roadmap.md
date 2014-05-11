@@ -1,15 +1,10 @@
-# Release 0.1
+# Things to do
 
 - [x] Pagination
-- [ ] Posting rate limitation
-
-# Release 0.2
-
-- [ ] Comments
-- [ ] Box access method: Anonymous / Google account / company mail
+- [x] Posting rate limitation
+- [ ] Idea page & Comments
+- [ ] Box access method: Anonymous / Google account / (restricted) mail
 - [ ] Hardened anti-cheat
-
-# Release 0.3
-
 - [ ] Improve anonymity
 - [ ] Test cases and automated testing
+- [ ] Light documentation
