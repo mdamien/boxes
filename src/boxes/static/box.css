@@ -21,7 +21,7 @@ body{
     color:#222;
 }
 
-.box-name a:hover{
+.box-name a:hover, .pages a:hover{
     text-decoration:none;
 }
 
@@ -74,14 +74,22 @@ color:white;
     z-index: 0;
     position: relative;
     margin-left: -6px;
+    cursor:pointer;
 }
 
 
 .pages .active {
     color: white;
     background: #498FDD;
-    margin-left: 0;
     z-index: 2;
+}
+
+.pages li:first-child {
+        margin: 0;
+}
+
+.pages a {
+    color:inherit;
 }
 
 .idea {

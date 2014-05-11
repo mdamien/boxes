@@ -7,7 +7,8 @@ idea = patterns('boxes.views',
 
 box = patterns('boxes.views',
     url(r'^idea/(?P<idea_pk>[0-9]+)/', include(idea)),
-    url(r'$', 'box'),
+    url(r'new/$', 'box', {'sort':'new'}, name='sort_new'),
+    url(r'$', 'box',{'sort':'top'}),
 )
 
 urlpatterns = patterns('boxes.views',

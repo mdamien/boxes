@@ -25,23 +25,29 @@ def vote(request, box_pk, idea_pk, vote):
     idea.update_cached_score()
     return HttpResponse(str(idea.score()))
 
-def box(request, box_pk):
+def box(request, box_pk, sort='top'):
     box = get_object_or_404(Box, pk=box_pk)
-    ideas = Idea.objects.filter(box=box).order_by('-cached_score')
+    ideas = Idea.objects.filter(box=box)
+    if sort is 'top':
+        ideas = ideas.order_by('-cached_score')
+    elif sort == 'new':
+        ideas = ideas.order_by('-date')
     if request.method == 'POST':
         idea = Idea(box=box, title=request.POST.get('title'))
         idea.save()
     
-    #add current vote
+    #add user current vote
     session_key = request.session.session_key
+    votes = Vote.objects.filter(session_key=session_key)
     for idea in ideas:
-        vote = Vote.objects.filter(idea=idea,session_key=session_key).first()
-        if vote:
-            idea.user_vote = vote.vote
+        for vote in votes:
+            if vote.idea_id == idea.pk:
+                idea.user_vote = vote.vote
 
     return render(request,'box/home.html',{
         'box':box,    
         'ideas':ideas,
+        'sort':sort,
     })
 
 def home(request):

@@ -15,7 +15,7 @@ class Idea(models.Model):
     box = models.ForeignKey(Box)
     title = models.CharField(max_length=300)
     content = models.TextField(blank=True)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     cached_score = models.IntegerField(default=0)
 
     def score(self):
@@ -32,7 +32,7 @@ class Idea(models.Model):
         self.save()
 
     def url(self):
-        return reverse('boxes.views.idea',args=(self.box.pk, self.pk,))
+        return reverse('boxes.views.idea',args=(self.box_id, self.pk,))
     
     def __str__(self):
         return self.title
