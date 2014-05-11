@@ -16,12 +16,21 @@ class Idea(models.Model):
     title = models.CharField(max_length=300)
     content = models.TextField(blank=True)
     date = models.DateTimeField(auto_now=True)
+    cached_score = models.IntegerField(default=0)
 
     def score(self):
+        return self.cached_score
+
+    def compute_score(self):
         score = Vote.objects.filter(idea=self).aggregate(Sum('vote')).get('vote__sum')
         if score is None:
             return 0
         return score
+
+    def update_cached_score(self):
+        self.cached_score = self.compute_score()
+        self.save()
+
     def url(self):
         return reverse('boxes.views.idea',args=(self.box.pk, self.pk,))
     

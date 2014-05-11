@@ -22,11 +22,12 @@ def vote(request, box_pk, idea_pk, vote):
         pass
     vote = Vote(idea=idea, session_key=session_key, vote=Vote.from_str(vote))
     vote.save()
+    idea.update_cached_score()
     return HttpResponse(str(idea.score()))
 
 def box(request, box_pk):
     box = get_object_or_404(Box, pk=box_pk)
-    ideas = Idea.objects.filter(box=box) #.order_by('-score')
+    ideas = Idea.objects.filter(box=box).order_by('-cached_score')
     if request.method == 'POST':
         idea = Idea(box=box, title=request.POST.get('title'))
         idea.save()
