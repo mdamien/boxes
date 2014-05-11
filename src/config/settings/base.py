@@ -10,6 +10,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = []
 
+SESSION_SAVE_EVERY_REQUEST = True
 
 INSTALLED_APPS = (
     'django.contrib.admin',
