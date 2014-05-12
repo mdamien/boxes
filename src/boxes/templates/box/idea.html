@@ -3,17 +3,35 @@
 {% block title %}{{ box }} - {{ idea.title }}{% endblock %}
 
 {% block box %}
+<style>
+h5 {
+margin:0;
+margin-top:20px;
+}
+
+.comment {
+    list-style: none;
+    background: #fff;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-radius: 3px;
+    margin: 2px;
+    padding: 5px 10px;
+    margin-top: 3px;
+    border-left: 3px solid rgb(189, 124, 248);
+}
+
+</style>
 {% include 'box/_idea.html' with full=True %}
-<h5>Comments (coming soon)</h5>
-<form method='post' action=''>
+<h5>Comments</h5>
+<form class='idea-form' method='post' action=''>
     {% csrf_token %}
-    <input type='text' name='comment' placeholder='Enter a comment here' />
+    <input type='text' name='content' placeholder='Enter a comment here' />
     <input type='submit' value='post'>
 </form>
-<br/>
 <ol class='comments'>
-{% for comment in idea.box.idea_set.all %}
-<li class='comment'><a href='{{ comment.url }}'>{{ comment.content }}</a></li>
+{% for comment in idea.comment_set.all %}
+<li class='comment'>{{ comment.content }}</li>
 {% endfor %}
 <ol>
 {% endblock %}

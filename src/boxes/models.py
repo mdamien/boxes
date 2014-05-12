@@ -51,3 +51,16 @@ class Vote(models.Model):
 
     def from_str(vote):
         return {'up':1,'down':-1}.get(vote)
+
+
+class Comment(models.Model):
+    idea = models.ForeignKey(Idea)
+    date = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+    session_key = models.CharField(max_length=40)
+
+    class Meta:
+        ordering = ('-date',)
+
+    def __str__(self):
+        return self.content

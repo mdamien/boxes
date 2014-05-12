@@ -1,12 +1,21 @@
 from django.shortcuts import get_object_or_404,render
 from django.http import HttpResponseRedirect, HttpResponse
-from boxes.models import Box, Idea, Vote
+from boxes.models import Box, Idea, Vote, Comment
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import random
 
 def idea(request, box_pk, idea_pk):
     idea = get_object_or_404(Idea, pk=idea_pk)
+    session_key = request.session.session_key
+    vote = Vote.objects.filter(idea=idea, session_key=session_key).first()
+
+    if request.method == 'POST':
+        comment = Comment(idea=idea, session_key=session_key, content=request.POST.get('content'))
+        comment.save()
+
+    if vote:
+        idea.user_vote = vote.vote
     return render(request,'box/idea.html',{
         'idea':idea, 
         'box':idea.box

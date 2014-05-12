@@ -15,6 +15,7 @@ body{
 
 .idea {
    overflow: auto; 
+   list-style: none;
 }
 
 .box-name a{
@@ -45,11 +46,11 @@ color:white;
     margin-bottom: 18px;
 }
 
-.idea-form input[name="title"] {
+.idea-form input[type="text"] {
     border: none;
     width: 260px;
 }
-.idea-form input[name="title"]:focus{
+.idea-form input[type="text"]:focus{
     outline:none;
 }
 
