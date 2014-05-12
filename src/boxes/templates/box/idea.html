@@ -18,7 +18,7 @@ margin-top:20px;
     margin: 2px;
     padding: 5px 10px;
     margin-top: 3px;
-    border-left: 3px solid rgb(189, 124, 248);
+    border-left: 3px solid black;
 }
 
 </style>
@@ -31,7 +31,7 @@ margin-top:20px;
 </form>
 <ol class='comments'>
 {% for comment in idea.comment_set.all %}
-<li class='comment'>{{ comment.content }}</li>
+    <li class='comment' style='border-left-color: hsla({{ comment.color }},90%,55%,1)'>{{ comment.content }}</li>
 {% endfor %}
 <ol>
 {% endblock %}

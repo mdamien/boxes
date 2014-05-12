@@ -1,6 +1,12 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.db.models import Sum
+import random
+
+def color(seed):
+    "return a random hue associated with the seed"
+    random.seed(seed) 
+    return int(random.random()*255)
 
 class Box(models.Model):
     name = models.CharField(max_length=300)
@@ -18,6 +24,9 @@ class Idea(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     cached_score = models.IntegerField(default=0)
     session_key = models.CharField(max_length=40)
+
+    def color(self):
+        return color(self.session_key)
 
     def score(self):
         return self.cached_score
@@ -58,6 +67,9 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
     session_key = models.CharField(max_length=40)
+
+    def color(self):
+        return color(self.session_key)
 
     class Meta:
         ordering = ('-date',)

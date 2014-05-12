@@ -100,6 +100,7 @@ color:white;
     border-radius: 3px;
     margin: 2px;
     padding: 5px 10px;
+    border-left-width:3px;
 }
 
 .vote-box {
