@@ -16,4 +16,9 @@
             <input type='submit' value='&#x2716;' />
         </form>
     {% endif %}
+    {% with idea.comment_set.count as N%}
+    {% if N > 0 %}
+    <a href='{{ idea.url }}' class='comments-count'>&#128172;{{ N }}</a>
+    {% endif %}
+    {% endwith %}
 </li>

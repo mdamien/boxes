@@ -2,7 +2,7 @@
 
 - [x] Pagination
 - [x] Posting rate limitation
-- [ ] Idea page & Comments
+- [x] Idea page & Comments
 - [ ] Box access method: Anonymous / Google account / (restricted) mail
 - [ ] Hardened anti-cheat
 - [ ] Improve anonymity

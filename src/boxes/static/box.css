@@ -128,6 +128,14 @@ color:white;
     text-decoration: none; 
     color: #F71945;
 }
+.comments-count{
+    float:right;
+    color:rgb(172, 172, 172);
+}
+.comments-count:hover {
+    color: rgb(100, 100, 100);
+    text-decoration: none;
+}
 
 .pagination {
     text-align: right;
