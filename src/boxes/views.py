@@ -11,7 +11,8 @@ def idea(request, box_pk, idea_pk):
     vote = Vote.objects.filter(idea=idea, session_key=session_key).first()
 
     if request.method == 'POST':
-        comment = Comment(idea=idea, session_key=session_key, content=request.POST.get('content'))
+        content = request.POST.get('content')
+        comment = Comment(idea=idea, session_key=session_key, content=content)
         comment.save()
 
     if vote:

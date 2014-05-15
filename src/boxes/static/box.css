@@ -141,8 +141,8 @@ color:white;
     text-align: right;
 }
 .step-links {
-background: rgb(245, 245, 245);
-color: rgb(145, 145, 145);
+background: #498FDD;
+color: rgb(231, 231, 231);
 font-size: 14px;
 padding: 0px 6px;
 margin-right: 3px;
@@ -153,11 +153,11 @@ border-color: #DBDBDB #D5D5D5 #C7C7C7;
 border-radius: 3px;
 }
 .step-links a {
-    color: rgb(143, 143, 143);
+    color: inherit;
 }
 .step-links a:hover {
     text-decoration:none;
-    color:rgb(27, 27, 27);
+    color: #FFB646;
 }
 
 .delete-form {
@@ -170,3 +170,4 @@ border-radius: 3px;
     border: none;
     background: none;
 }
+
