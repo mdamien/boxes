@@ -7,10 +7,21 @@
 {% endblock %}
 
 {% block content %}
-<form method='post' action='' class='new-box'>
-<h3>Create an idea box</h3>
+<div class='form-wrapper'>
+<form method='post' action='' class='new-box row'>
+<h3 class='title'>Create a discussion box</h3>
 {% csrf_token %}
-<input type='text' name='name' placeholder='Enter box name here'/>
+<input type='text' name='name' autofocus placeholder='Enter box name here'/>
+<h5 class='access-method-title'>Access method</h5>
+<ul class='choices'>
+    <li class='selected'>No restriction</li>
+    <li>Require google account</li>
+    <li>Require specific mail domain</li>
+</ul>
 <input type='submit' value='Create'/>
 </form>
+</div>
+
+<div class='marketing row'>
+</div>
 {% endblock %}

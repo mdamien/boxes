@@ -1,7 +1,10 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.db.models import Sum
-import random
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import hashlib, random
+
 
 def color(seed):
     "return a random hue associated with the seed"
@@ -10,6 +13,47 @@ def color(seed):
 
 class Box(models.Model):
     name = models.CharField(max_length=300)
+
+    ACCESS_BY_SESSION = 0
+    ACCESS_BY_EMAIL = 1
+    ACCESS_MODES = (
+       (ACCESS_BY_SESSION,'session'),
+       (ACCESS_BY_EMAIL,'email'),
+    )
+    access_mode = models.IntegerField(choices=ACCESS_MODES, default=ACCESS_BY_SESSION)
+    
+    #access restriction by email
+    email_suffix = models.CharField(max_length=100)
+    email_list = models.TextField(blank=True) #comma-separated hashed mail list
+    email_keys = models.TextField(blank=True) #comma-separated access keys list
+
+    def access_restricted_by_mail(self):
+        return len(self.email_suffix) > 0
+
+    def email_register(self,email):
+        #validate email
+        validate_email(email)
+        if not email.endswith(self.email_suffix):
+            raise ValidationError("email has to end with %s" % self.email_suffix)
+
+        email_list = self.email_list.split(',')
+        hashed_email = hashlib.sha1(email.encode('utf-8')).hexdigest()
+        if hashed_email in email_list:
+            raise ValidationError("Access key already sent to this email")
+
+        email_list.append(hashed_email)
+        email_list = random.shuffle(email_list)
+        self.email_list = ','.join(email_list)
+
+        #generate key
+        key = hashlib.sha1(str(random.SystemRandom().random()).encode('utf-8')).hexdigest()[:5]
+        keys = self.email_keys.split(',')
+        keys.append(key)
+        self.email_keys = ','.join(keys)
+
+        self.save()
+
+        return email, key
 
     def url(self):
         return reverse('boxes.views.box',args=(self.pk,))
@@ -56,7 +100,9 @@ class Vote(models.Model):
        (DOWN,'down'),
     )
     vote = models.IntegerField(choices=VOTES)
-    session_key = models.CharField(max_length=40)
+
+    #access_key = session_key in case of an anonymous box
+    access_key = models.CharField(max_length=40)
 
     def from_str(vote):
         return {'up':1,'down':-1}.get(vote)

@@ -8,11 +8,10 @@ import random
 def idea(request, box_pk, idea_pk):
     idea = get_object_or_404(Idea, pk=idea_pk)
     session_key = request.session.session_key
-    vote = Vote.objects.filter(idea=idea, session_key=session_key).first()
+    vote = Vote.objects.filter(idea=idea, access_key=session_key).first()
 
     if request.method == 'POST':
-        content = request.POST.get('content')
-        comment = Comment(idea=idea, session_key=session_key, content=content)
+        comment = Comment(idea=idea, session_key=session_key, content=request.POST.get('content'))
         comment.save()
 
     if vote:
@@ -24,7 +23,6 @@ def idea(request, box_pk, idea_pk):
 
 @require_POST
 def delete_idea(request, box_pk, idea_pk):
-    box = get_object_or_404(Box, pk=box_pk)
     idea = get_object_or_404(Idea, pk=idea_pk)
     idea.delete()
     return HttpResponseRedirect(box.url())
@@ -34,11 +32,11 @@ def vote(request, box_pk, idea_pk, vote):
     idea = get_object_or_404(Idea, pk=idea_pk)
     session_key = request.session.session_key
     try:
-        current_vote = Vote.objects.get(session_key=session_key, idea=idea)
+        current_vote = Vote.objects.get(access_key=session_key, idea=idea)
         current_vote.delete()
     except Vote.DoesNotExist:
         pass
-    vote = Vote(idea=idea, session_key=session_key, vote=Vote.from_str(vote))
+    vote = Vote(idea=idea, access_key=session_key, vote=Vote.from_str(vote))
     vote.save()
     idea.update_cached_score()
     return HttpResponse(str(idea.score()))
@@ -68,7 +66,7 @@ def box(request, box_pk, sort='top'):
         ideas = paginator.page(paginator.num_pages)
 
     #add user current vote
-    votes = Vote.objects.filter(session_key=session_key)
+    votes = Vote.objects.filter(access_key=session_key)
     for idea in ideas:
         for vote in votes:
             if vote.idea_id == idea.pk:
