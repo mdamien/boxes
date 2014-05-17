@@ -5,8 +5,8 @@ import random
 
 def color(seed):
     "return a random hue associated with the seed"
-    random.seed(seed) 
-    return int(random.random()*255)
+    rand = random.Random(seed)
+    return int(rand.random()*255)
 
 class Box(models.Model):
     name = models.CharField(max_length=300)
