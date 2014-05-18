@@ -34,9 +34,6 @@ video {
 html {
     height: 100%;
     font-size: 100%;
-    overflow-y: scroll;
-    /* Force scrollbar in non-IE and Remove iOS text size adjust without disabling user zoom */
-    -webkit-text-size-adjust: 100%;
 }
 body {
     margin: 0;

@@ -12,16 +12,38 @@
 <h3 class='title'>Create a discussion box</h3>
 {% csrf_token %}
 <input type='text' name='name' autofocus placeholder='Enter box name here'/>
-<h5 class='access-method-title'>Access method</h5>
+<h5 class='access-method-title'>Access restriction</h5>
+<input type='hidden' name='access-method' value='session'/>
 <ul class='choices'>
-    <li class='selected'>No restriction</li>
-    <li>Require google account</li>
-    <li>Require specific mail domain</li>
+    <li class='selected' data-value='session'>No restriction</li>
+    <li data-value='google'>Require google account</li>
+    <li data-value='email'>Require specific mail domain</li>
 </ul>
+<div class='email-restrict' style='display:none;'>
+    <span>@</span><input type='text' name='email-suffix' placeholder='company.com'/>
+</div>
 <input type='submit' value='Create'/>
 </form>
 </div>
 
 <div class='marketing row'>
 </div>
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+<script>
+$('.choices li').click(function(e){
+    $('.choices li').removeClass('selected');
+    $(this).addClass('selected')
+    var value = $(this).attr('data-value');
+    $('input[name="access-method"]').attr('value',value)
+    if(value == 'email'){
+        $('.email-restrict').show()
+    }else{
+        $('.email-restrict').hide()
+    }
+})
+</script>
 {% endblock %}
