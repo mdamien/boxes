@@ -16,10 +16,8 @@ def join(request, box_pk):
             email = request.POST.get('email')
             try:
                 key = box.email_register(email)
-                send_mail('kioto.io: Access code for "%s"' % box.name,
-                        key,
-                        'no-reply@kioto.io',
-                        [email], fail_silently=False)
+                send_mail('kioto.io: Access code for "%s"' % box.name,key,
+                        'no-reply@kioto.io',[email], fail_silently=False)
                 messages.add_message(request, messages.SUCCESS, 'Access code sent to %s' % email)
             except ValidationError as e:
                 messages.add_message(request, messages.ERROR, e.message)
@@ -32,7 +30,7 @@ def join(request, box_pk):
             else:
                 messages.add_message(request, messages.ERROR, 'Invalid access code')
 
-    return render(request, 'box/join.html', { 'box': box})
+    return render(request, 'box/join.html', { 'box': box, 'hide_logout':True})
 
 def idea(request, box_pk, idea_pk):
     idea = get_object_or_404(Idea, pk=idea_pk)
@@ -61,6 +59,7 @@ def logout(request, box_pk):
 
 @require_POST
 def delete_idea(request, box_pk, idea_pk):
+    box = get_object_or_404(Box, pk=box_pk)
     idea = get_object_or_404(Idea, pk=idea_pk)
     idea.delete()
     return HttpResponseRedirect(box.url())
@@ -91,6 +90,11 @@ def box(request, box_pk, sort='top'):
         ideas = ideas.order_by('-cached_score','-date')
     elif sort == 'new':
         ideas = ideas.order_by('-date')
+    elif sort == 'hot':
+        ideas = list(ideas.order_by('-date')[:200])
+        for idea in ideas:
+            idea.hot_score = idea.compute_hot_score()
+        ideas.sort(key=lambda x: x.hot_score, reverse=True)
     
     session_key = request.session.session_key
     
@@ -100,7 +104,7 @@ def box(request, box_pk, sort='top'):
         #return HttpResponseRedirect(idea.url())
 
     #pagination
-    paginator = Paginator(ideas, 10)
+    paginator = Paginator(ideas, 40)
     page = request.GET.get('page')
     try:
         ideas = paginator.page(page)
@@ -130,6 +134,8 @@ def home(request):
         if request.POST.get('access-method') == 'email':
             box = Box(pk=pk,name=name, access_mode=Box.ACCESS_BY_EMAIL,
                     email_suffix=request.POST.get('email-suffix'))
+            messages.add_message(request, messages.SUCCESS, 
+            'Box successfully created, now you need to request an access code')
         else:
             box = Box(pk=pk,name=name)
         box.save()

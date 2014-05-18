@@ -48,6 +48,22 @@ z-index: 10;
     color:white;
 }
 
+.logo {
+    /* border: 1px solid #074891; */
+    padding: 0 5px;
+    display: inline-block;
+    border-radius: 2px;
+    transition: all 0.2s;
+    background: #0A67CF;
+    color: #72A9E5 !important;
+    margin-left: -20px;
+    margin-right: 4px;
+}
+.logo:hover {
+    text-decoration: none;
+    background: white;
+}
+
 .idea-form {
     background: #fff;
     border: 1px solid;
@@ -58,15 +74,16 @@ z-index: 10;
     padding: 5px 10px;
     margin-top: 15px;
     margin-bottom: 18px;
-    width: 270px;
+    width: 400px;
 }
 
-.idea-form input[type="text"] {
+.idea-form input[type="text"], .idea-form input[type="email"] {
     border: none;
-    width: 201px;
+    width: 324px;
 }
-.idea-form input[type="text"]:focus
-,.idea-form input[type="password"]:focus{
+.idea-form input[type="text"]:focus,
+.idea-form input[type="email"]:focus,
+.idea-form input[type="password"]:focus{
     outline:none;
 }
 
@@ -207,7 +224,7 @@ div.request-form {
 }
 .request-form form {
     text-align: left;
-    width: 210px;
+    width: 300px;
     margin-top: 0px;
     background: rgb(233, 233, 233);
 }
@@ -230,7 +247,7 @@ div.request-form {
 .access-form {
     width: 530px;
 }
-.request-form input[type="text"] {
+.request-form input[type="email"] {
     background: transparent;
 }
 
@@ -248,8 +265,9 @@ div.request-form {
     background: #F84467;
 }
 .messages .success {
-    background: #7BF242;
+    background: #4DEC00;
 }
 .messages .warning {
     background: #FFB646;
 }
+

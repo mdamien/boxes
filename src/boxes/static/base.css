@@ -328,7 +328,7 @@ del {
     color: #fff;
 }
 ::selection {
-    background: #555;
+    rgba(171, 171, 171, 0.45)
     color: #fff;
 }
 

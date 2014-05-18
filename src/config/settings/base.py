@@ -68,3 +68,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = join(PROJECT_DIR,'static')
+
+
+SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
+    'social.backends.google.GoogleOAuth2',
+)

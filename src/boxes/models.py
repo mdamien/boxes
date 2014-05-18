@@ -4,10 +4,25 @@ from django.db.models import Sum
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import hashlib, random
+from datetime import datetime
+from math import log
 
+epoch = datetime(1970, 1, 1)
+
+def epoch_seconds(date):
+    """Returns the number of seconds from the epoch to date."""
+    td = date - epoch
+    return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
+
+def hot_score(score, date):
+    """The hot formula from reddit"""
+    order = log(max(abs(score), 1), 10)
+    sign = 1 if score > 0 else -1 if score < 0 else 0
+    seconds = epoch_seconds(date) - 1134028003
+    return round(order + sign * seconds / 45000, 7)
 
 def color(seed):
-    "return a random hue associated with the seed"
+    """Return a random hue associated with the seed"""
     rand = random.Random(seed)
     return int(rand.random()*255)
 
@@ -33,12 +48,12 @@ class Box(models.Model):
         #validate email
         validate_email(email)
         if not email.endswith('@'+self.email_suffix):
-            raise ValidationError("email address has to end with %s" % self.email_suffix)
+            raise ValidationError("email address has to end with @%s" % self.email_suffix)
 
         email_list = self.email_list.split(',')
         hashed_email = hashlib.sha1(email.encode('utf-8')).hexdigest()
         if hashed_email in email_list:
-            raise ValidationError("Access key already sent to this email")
+            raise ValidationError("Access code already sent to this email")
 
         email_list.append(hashed_email)
         random.shuffle(email_list)
@@ -56,6 +71,9 @@ class Box(models.Model):
 
     def key_valid(self, key):
         return key in [key for key in self.email_keys.split(',') if key != '']
+
+    def is_access_by_session(self):
+        return self.access_mode == self.ACCESS_BY_SESSION
 
     def url(self):
         return reverse('boxes.views.box',args=(self.pk,))
@@ -82,6 +100,9 @@ class Idea(models.Model):
         if score is None:
             return 0
         return score
+
+    def compute_hot_score(self):
+        return hot_score(self.score(), self.date.replace(tzinfo=None))
 
     def update_cached_score(self):
         self.cached_score = self.compute_score()

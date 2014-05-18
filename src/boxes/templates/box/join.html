@@ -2,7 +2,7 @@
 
 {% block extra-headers %}
 <div class="access-header">
-    <h5 class="row">Access to this box is restricted</h5>
+    <h5 class="row">Access to this box is restricted by email address</h5>
 </div>
 {{ block.super }}
 {% endblock %}
@@ -17,7 +17,7 @@
     <form class="idea-form" method="post" action="">
         <h4>No access code ?</h4>
         {% csrf_token %}
-        <input type="text" name="email" value="@{{ box.email_suffix }}">
+        <input type="email" name="email" placeholder="Enter your email @{{ box.email_suffix }}">
         <input type="submit" value="Send an access code" name="request-key">
     </form>
 </div>

@@ -8,8 +8,10 @@
 </form>
 <br/>
 <ul class='pages'>
-    <li {% if sort == 'top' %}class='active'{% endif %}>
-        <a href='{% url 'boxes.views.box' box.pk %}'>Top</a>
+     <li {% if sort == 'hot' %}class='active'{% endif %}>
+        <a href='{% url 'boxes.views.box' box.pk %}'>Hot</a>
+    </li><li {% if sort == 'top' %}class='active'{% endif %}>
+        <a href='{% url 'sort_top' box.pk %}'>Top</a>
     </li><li {% if sort == 'new' %}class='active'{% endif %}>
         <a href='{% url 'sort_new' box.pk %}'>New</a>
     </li>
