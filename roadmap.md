@@ -5,14 +5,14 @@
 - [x] Pagination
 - [x] Posting rate limitation
 - [x] Idea page & Comments
-- [ ] Box access restriction by mail
+- [x] Box access restriction by mail
 - [ ] Box access restriction by google account
 - [ ] Sort by hot (Reddit hot algorithm)
 
 ## Code
 
 - [ ] Light documentation
-- [ ] Test cases and automated testing
+- [ ] Automated testing
 - [ ] Hardened anti-cheat
 - [ ] Improve anonymity
 - [ ] Switch to class-based views (own)

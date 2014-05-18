@@ -3,12 +3,36 @@ from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote, Comment
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
+from django.contrib import messages
 import random
 
 def join(request, box_pk):
     box = get_object_or_404(Box, pk=box_pk)
-    return render(request, 'box/join.html', { 'box': box })
+    if request.method == 'POST':
+        if request.POST.get('request-key'):
+            email = request.POST.get('email')
+            try:
+                key = box.email_register(email)
+                send_mail('kioto.io: Access code for "%s"' % box.name,
+                        key,
+                        'no-reply@kioto.io',
+                        [email], fail_silently=False)
+                messages.add_message(request, messages.SUCCESS, 'Access code sent to %s' % email)
+            except ValidationError as e:
+                messages.add_message(request, messages.ERROR, e.message)
+        else:
+            if box.key_valid(request.POST.get('key')):
+                keys = request.session.get('boxes_keys',{})
+                keys[box.pk] = request.POST.get('key')
+                request.session['boxes_keys'] = keys
+                return HttpResponseRedirect(box.url())
+            else:
+                messages.add_message(request, messages.ERROR, 'Invalid access code')
+
+    return render(request, 'box/join.html', { 'box': box})
 
 def idea(request, box_pk, idea_pk):
     idea = get_object_or_404(Idea, pk=idea_pk)
@@ -25,6 +49,15 @@ def idea(request, box_pk, idea_pk):
         'idea':idea, 
         'box':idea.box
     })
+
+@require_POST
+def logout(request, box_pk):
+    box = get_object_or_404(Box, pk=box_pk)
+    keys = request.session.get('boxes_keys',{})
+    if box_pk in keys:
+        del keys[box_pk]
+    request.session['boxes_keys'] = keys
+    return HttpResponseRedirect(box.url())
 
 @require_POST
 def delete_idea(request, box_pk, idea_pk):
@@ -50,7 +83,8 @@ def box(request, box_pk, sort='top'):
     box = get_object_or_404(Box, pk=box_pk)
     ideas = Idea.objects.filter(box=box)
 
-    if box.access_mode == Box.ACCESS_BY_EMAIL:
+    if not box.key_valid(request.session.get('boxes_keys',{}).get(str(box.pk),'')) \
+            and box.access_mode == Box.ACCESS_BY_EMAIL:
         return HttpResponseRedirect(reverse('boxes.views.join', args=(box.pk,))) 
 
     if sort is 'top':
@@ -87,6 +121,7 @@ def box(request, box_pk, sort='top'):
         'ideas':ideas,
         'sort':sort,
     })
+
 
 def home(request):
     if request.method == 'POST':

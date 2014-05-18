@@ -8,7 +8,8 @@ SECRET_KEY = 'hldpr%r=(c=58n*tp6!vk#t$dhwqanx(^-d==z#okpijd&70xd'
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS = []
+DOMAIN_NAME = 'kioto.io'
+ALLOWED_HOSTS = [DOMAIN_NAME]
 
 SESSION_SAVE_EVERY_REQUEST = True
 

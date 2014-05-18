@@ -11,6 +11,7 @@ box = patterns('boxes.views',
     url(r'^idea/(?P<idea_pk>[0-9]+)/', include(idea)),
     url(r'join/$', 'join'),
     url(r'new/$', 'box', {'sort':'new'}, name='sort_new'),
+    url(r'logout/$', 'logout'),
     url(r'$', 'box',{'sort':'top'}),
 )
 

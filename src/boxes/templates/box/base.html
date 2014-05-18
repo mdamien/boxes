@@ -4,11 +4,24 @@
 
 {% block content %}
 <div class='header'>
-    <h5 class='box-name row'><a href='{{ box.url }}'>{{ box }}</a></h5>
+    <div class='row'>
+    <a class='box-name' href='{{ box.url }}'>{{ box }}</a>
+    <form method='post' class='logout' action='{% url 'boxes.views.logout' box.pk %}'>
+        {% csrf_token %}
+        <input type='submit' value='logout'/>
+    </form>
+    </div>
 </div>
-{% block messages %}
+{% block extra-headers %}
 {% endblock %}
 <div class='box row'>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 {% block box %}
 {% endblock %}
 </div>

@@ -32,8 +32,8 @@ class Box(models.Model):
     def email_register(self,email):
         #validate email
         validate_email(email)
-        if not email.endswith(self.email_suffix):
-            raise ValidationError("email has to end with %s" % self.email_suffix)
+        if not email.endswith('@'+self.email_suffix):
+            raise ValidationError("email address has to end with %s" % self.email_suffix)
 
         email_list = self.email_list.split(',')
         hashed_email = hashlib.sha1(email.encode('utf-8')).hexdigest()
@@ -41,7 +41,7 @@ class Box(models.Model):
             raise ValidationError("Access key already sent to this email")
 
         email_list.append(hashed_email)
-        email_list = random.shuffle(email_list)
+        random.shuffle(email_list)
         self.email_list = ','.join(email_list)
 
         #generate key
@@ -52,7 +52,10 @@ class Box(models.Model):
 
         self.save()
 
-        return email, key
+        return key
+
+    def key_valid(self, key):
+        return key in [key for key in self.email_keys.split(',') if key != '']
 
     def url(self):
         return reverse('boxes.views.box',args=(self.pk,))
