@@ -1,0 +1,23 @@
+{% extends 'box/base.html' %}
+
+{% block messages %}
+<div class="warning">
+    <h5 class="row">Access to this box is restricted</h5>
+</div>
+{% endblock %}
+
+{% block box %}
+<form class="idea-form access-form" method="post" action="">
+    {% csrf_token %}
+    <input type="text" name="key" placeholder="Enter your access code here">
+    <input type="submit" value="Enter" name="enter-key">
+</form>
+<div class="request-form">
+    <form class="idea-form" method="post" action="">
+        <h4>No access code ?</h4>
+        {% csrf_token %}
+        <input type="text" name="email" placeholder="Enter your email @{{ box.email_suffix }}">
+        <input type="submit" value="Send an access code" name="request-key">
+    </form>
+</div>
+{% endblock %}

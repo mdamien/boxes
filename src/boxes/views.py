@@ -3,7 +3,12 @@ from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote, Comment
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 import random
+
+def join(request, box_pk):
+    box = get_object_or_404(Box, pk=box_pk)
+    return render(request, 'box/join.html', { 'box': box })
 
 def idea(request, box_pk, idea_pk):
     idea = get_object_or_404(Idea, pk=idea_pk)
@@ -44,6 +49,10 @@ def vote(request, box_pk, idea_pk, vote):
 def box(request, box_pk, sort='top'):
     box = get_object_or_404(Box, pk=box_pk)
     ideas = Idea.objects.filter(box=box)
+
+    if box.access_mode == Box.ACCESS_BY_EMAIL:
+        return HttpResponseRedirect(reverse('boxes.views.join', args=(box.pk,))) 
+
     if sort is 'top':
         ideas = ideas.order_by('-cached_score','-date')
     elif sort == 'new':
@@ -54,6 +63,7 @@ def box(request, box_pk, sort='top'):
     if request.method == 'POST':
         idea = Idea(box=box, title=request.POST.get('title'), session_key=session_key)
         idea.save()
+        #return HttpResponseRedirect(idea.url())
 
     #pagination
     paginator = Paginator(ideas, 10)
@@ -80,8 +90,13 @@ def box(request, box_pk, sort='top'):
 
 def home(request):
     if request.method == 'POST':
-        #todo: proper form handling
-        box = Box(pk=random.randint(1,100000),name=request.POST.get('name'))
+        pk = random.randint(1,100000)
+        name = request.POST.get('name')
+        if request.POST.get('access-method') == 'email':
+            box = Box(pk=pk,name=name, access_mode=Box.ACCESS_BY_EMAIL,
+                    email_suffix=request.POST.get('email-suffix'))
+        else:
+            box = Box(pk=pk,name=name)
         box.save()
         return HttpResponseRedirect(box.url())
     return render(request,'home.html')

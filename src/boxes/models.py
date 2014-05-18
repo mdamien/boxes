@@ -16,9 +16,11 @@ class Box(models.Model):
 
     ACCESS_BY_SESSION = 0
     ACCESS_BY_EMAIL = 1
+    ACCESS_BY_GOOGLE = 2
     ACCESS_MODES = (
        (ACCESS_BY_SESSION,'session'),
        (ACCESS_BY_EMAIL,'email'),
+       (ACCESS_BY_GOOGLE,'google'),
     )
     access_mode = models.IntegerField(choices=ACCESS_MODES, default=ACCESS_BY_SESSION)
     
@@ -26,9 +28,6 @@ class Box(models.Model):
     email_suffix = models.CharField(max_length=100)
     email_list = models.TextField(blank=True) #comma-separated hashed mail list
     email_keys = models.TextField(blank=True) #comma-separated access keys list
-
-    def access_restricted_by_mail(self):
-        return len(self.email_suffix) > 0
 
     def email_register(self,email):
         #validate email

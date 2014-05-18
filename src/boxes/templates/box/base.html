@@ -6,6 +6,8 @@
 <div class='header'>
     <h5 class='box-name row'><a href='{{ box.url }}'>{{ box }}</a></h5>
 </div>
+{% block messages %}
+{% endblock %}
 <div class='box row'>
 {% block box %}
 {% endblock %}
