@@ -5,21 +5,19 @@
 - [x] Pagination
 - [x] Posting rate limitation
 - [x] Idea page & Comments
-- [x] Box access restriction by mail
+- [\] Box access restriction by mail
 - [ ] Box access restriction by google account
-- [ ] Sort by hot (Reddit hot algorithm)
+- [x] Sort by hot (approximate reddit hot algorithm)
+- [ ] Explain product on homepage
 
 ## Code
 
-- [ ] Light documentation
 - [ ] Automated testing
-- [ ] Hardened anti-cheat
-- [ ] Improve anonymity
-- [ ] Switch to class-based views (own)
+- [x] DRY views
 
 # Little things to do
 
 - [ ] Comments tree 
 - [ ] Idea content and edit
-- [ ] Box sidebar with description and edit
+- [ ] Box sidebar with description, link to share and edit
 
