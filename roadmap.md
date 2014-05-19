@@ -2,18 +2,15 @@
 
 ## UX
 
-- [x] Pagination
-- [x] Posting rate limitation
-- [x] Idea page & Comments
-- [\] Box access restriction by mail
+- [ ] Box access restriction by mail
+    - [x] Process
+    - [ ] Use it in box
 - [ ] Box access restriction by google account
-- [x] Sort by hot (approximate reddit hot algorithm)
 - [ ] Explain product on homepage
 
 ## Code
 
 - [ ] Automated testing
-- [x] DRY views
 
 # Little things to do
 

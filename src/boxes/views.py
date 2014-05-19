@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404,render
+from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote, Comment
 from django.views.decorators.http import require_POST
@@ -80,12 +80,7 @@ def vote(request, box_pk, idea_pk, vote, idea=None):
 
 @decorators.box
 def box(request, box_pk, sort='top', box=None):
-    ideas = Idea.objects.filter(box=box)
-
-    if not box.key_valid(request.session.get('boxes_keys',{}).get(str(box.pk),'')) \
-            and box.access_mode == Box.ACCESS_BY_EMAIL:
-        return HttpResponseRedirect(reverse('boxes.views.join', args=(box.pk,))) 
-    
+    ideas = Idea.objects.filter(box=box) 
     session_key = request.session.session_key
     if request.method == 'POST':
         idea = Idea(box=box, title=request.POST.get('title'), user_key=session_key)

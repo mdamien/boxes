@@ -57,6 +57,12 @@ class Box(models.Model):
 
     def is_access_by_session(self):
         return self.access_mode == self.ACCESS_BY_SESSION
+    
+    def is_access_by_email(self):
+        return self.access_mode == self.ACCESS_BY_EMAIL
+    
+    def is_access_by_google(self):
+        return self.access_mode == self.ACCESS_BY_GOOGLE
 
     def url(self):
         return reverse('boxes.views.box',args=(self.pk,))
