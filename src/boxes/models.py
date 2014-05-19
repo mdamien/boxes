@@ -4,29 +4,10 @@ from django.db.models import Sum
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import hashlib, random
-from datetime import datetime
-from math import log
-
-epoch = datetime(1970, 1, 1)
-
-def epoch_seconds(date):
-    """Returns the number of seconds from the epoch to date."""
-    td = date - epoch
-    return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
-
-def hot_score(score, date):
-    """The hot formula from reddit"""
-    order = log(max(abs(score), 1), 10)
-    sign = 1 if score > 0 else -1 if score < 0 else 0
-    seconds = epoch_seconds(date) - 1134028003
-    return round(order + sign * seconds / 45000, 7)
-
-def color(seed):
-    """Return a random hue associated with the seed"""
-    rand = random.Random(seed)
-    return int(rand.random()*255)
+from boxes import helpers
 
 class Box(models.Model):
+    slug = models.SlugField(unique=True)
     name = models.CharField(max_length=300)
 
     ACCESS_BY_SESSION = 0
@@ -39,6 +20,8 @@ class Box(models.Model):
     )
     access_mode = models.IntegerField(choices=ACCESS_MODES, default=ACCESS_BY_SESSION)
     
+    user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
+ 
     #access restriction by email
     email_suffix = models.CharField(max_length=100)
     email_list = models.TextField(blank=True) #comma-separated hashed mail list
@@ -60,7 +43,7 @@ class Box(models.Model):
         self.email_list = ','.join(email_list)
 
         #generate key
-        key = hashlib.sha1(str(random.SystemRandom().random()).encode('utf-8')).hexdigest()[:5]
+        key = helpers.randascii(5)
         keys = self.email_keys.split(',')
         keys.append(key)
         self.email_keys = ','.join(keys)
@@ -87,10 +70,10 @@ class Idea(models.Model):
     content = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)
     cached_score = models.IntegerField(default=0)
-    session_key = models.CharField(max_length=40)
+    user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
 
     def color(self):
-        return color(self.session_key)
+        return helpers.color(self.user_key)
 
     def score(self):
         return self.cached_score
@@ -102,7 +85,7 @@ class Idea(models.Model):
         return score
 
     def compute_hot_score(self):
-        return hot_score(self.score(), self.date.replace(tzinfo=None))
+        return helpers.hot_score(self.score(), self.date.replace(tzinfo=None))
 
     def update_cached_score(self):
         self.cached_score = self.compute_score()
@@ -124,8 +107,7 @@ class Vote(models.Model):
     )
     vote = models.IntegerField(choices=VOTES)
 
-    #access_key = session_key in case of an anonymous box
-    access_key = models.CharField(max_length=40)
+    user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
 
     def from_str(vote):
         return {'up':1,'down':-1}.get(vote)
@@ -135,10 +117,10 @@ class Comment(models.Model):
     idea = models.ForeignKey(Idea)
     date = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-    session_key = models.CharField(max_length=40)
+    user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
 
     def color(self):
-        return color(self.session_key)
+        return helpers.color(self.user_key)
 
     class Meta:
         ordering = ('-date',)
