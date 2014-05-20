@@ -1,17 +1,17 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote, Comment
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.contrib import messages
 from boxes import helpers
 from boxes import decorators
 
-@decorators.box
-def join(request, box_pk, box=None):
+def join(request, box_pk):
+    box = get_object_or_404(Box, pk=box_pk)
     if request.method == 'POST':
         if request.POST.get('request-key'):
             email = request.POST.get('email')

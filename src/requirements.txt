@@ -1,6 +1,0 @@
-django
-python-social-auth
-
-django-debug-toolbar
-
-gunicorn

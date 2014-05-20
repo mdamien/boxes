@@ -1,0 +1,5 @@
+language: python
+python:
+  - "3.3"
+install: pip install -r src/requirements/test.txt
+script:  python src/manage.py test
