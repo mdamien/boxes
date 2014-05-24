@@ -57,54 +57,6 @@ def idea_vote(request, box_pk, idea_pk, vote, idea=None, user_key=None):
     idea.update_cached_score()
     return HttpResponse(str(idea.score()))
 
-@decorators.box
-def box(request, box_pk, sort='top', box=None, user_key=None):
-    ideas = Idea.objects.filter(box=box) 
-    session_key = request.session.session_key
-    if request.method == 'POST':
-        idea = Idea(box=box, title=request.POST.get('title'), user_key=session_key)
-        idea.save()
-
-    if sort is 'top':
-        ideas = ideas.order_by('-cached_score','-date')
-    elif sort == 'new':
-        ideas = ideas.order_by('-date')
-    elif sort == 'hot':
-        ideas = list(ideas.order_by('-date')[:200])
-        for idea in ideas:
-            idea.hot_score = idea.compute_hot_score()
-        ideas.sort(key=lambda x: x.hot_score, reverse=True)
-    
-
-    #pagination
-    paginator = Paginator(ideas, 40)
-    page = request.GET.get('page')
-    try:
-        ideas = paginator.page(page)
-    except PageNotAnInteger:
-        ideas = paginator.page(1)
-    except EmptyPage:
-        ideas = paginator.page(paginator.num_pages)
-
-    #add user current vote
-    votes = Vote.objects.filter(user_key=session_key)
-    for idea in ideas:
-        for vote in votes:
-            if vote.idea_id == idea.pk:
-                idea.user_vote = vote.vote
-
-    return render(request,'box/home.html',{
-        'box':box,    
-        'ideas':ideas,
-        'sort':sort,
-    })
-
-
-
-
-
-
-
 class HomepageView(generic.TemplateView):
     template_name = 'home.html'
 
@@ -117,14 +69,50 @@ class HomepageView(generic.TemplateView):
 home = HomepageView.as_view()
 
 class BoxMixin:
+    def dispatch(self, request, *args, **kwargs):
+        self.box = Box.objects.get(pk=kwargs['box_pk'])
+        self.user_key = request.session.session_key
+        return super(BoxMixin, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
-        self.box = Box.objects.get(pk=self.kwargs['box_pk'])
-        return super(BoxMixin, self).get_context_data(box=self.box)
+        return super(BoxMixin, self).get_context_data(
+                box=self.box, **kwargs)
 
 class BoxView(BoxMixin, generic.ListView):
-    model = Box
     template_name = 'box/home.html'
+    context_object_name = 'ideas'
+    
+    def get_context_data(self, **kwargs):
+        return super(BoxView, self).get_context_data(
+            sort=self.kwargs['sort'], **kwargs)
 
+    def get_queryset(self):
+        ideas = Idea.objects.filter(box=self.box) 
+        sort = self.kwargs['sort']
+        if sort is 'top':
+            ideas = ideas.order_by('-cached_score','-date')
+        elif sort == 'new':
+            ideas = ideas.order_by('-date')
+        elif sort == 'hot':
+            ideas = list(ideas.order_by('-date')[:200])
+            for idea in ideas:
+                idea.hot_score = idea.compute_hot_score()
+            ideas.sort(key=lambda x: x.hot_score, reverse=True)
+        
+        #add user current vote
+        votes = Vote.objects.filter(user_key=self.user_key)
+        for idea in ideas:
+            for vote in votes:
+                if vote.idea_id == idea.pk:
+                    idea.user_vote = vote.vote
+        
+        return ideas
+
+    def post(self, request, *args, **kwargs):
+        idea = Idea(box=self.box, title=request.POST.get('title'), 
+                user_key=self.user_key)
+        idea.save()
+        return self.get(request, *args, **kwargs)
 
 box = BoxView.as_view()
 
