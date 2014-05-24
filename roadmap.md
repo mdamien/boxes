@@ -3,12 +3,10 @@
 ## UX
 
 - [ ] Box access restriction by mail
-- [ ] Box access restriction by google account
 - [ ] Explain product
 
 ## Code
 
-- [ ] Refactor views into class-based views
 - [ ] Add real testing suite
 
 # Little things to do

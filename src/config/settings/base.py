@@ -6,12 +6,10 @@ logger = logging.getLogger(__name__)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 
-SECRET_KEY = 'hldpr%r=(c=58n*tp6!vk#t$dhwqanx(^-d==z#okpijd&70xd'
+SECRET_KEY = 'sometimes_i_like_to_search_for_secret_keys_on_github'
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-DOMAIN_NAME = 'kioto.io'
-ALLOWED_HOSTS = [DOMAIN_NAME]
 
 SESSION_SAVE_EVERY_REQUEST = True
 
@@ -24,6 +22,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'boxes',
+
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -72,16 +72,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = join(PROJECT_DIR,'static')
 
 
-SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
+AUTHENTICATION_BACKENDS = (
+    'social.backends.google.GoogleOpenId',
+    'django.contrib.auth.backends.ModelBackend',
 )
-
-try:
-    #this file is unversionned and contains secrets such SECRET_KEY or database credentials
-    import config.settings.secrets as secrets
-    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
-    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-except ImportError:
-    logger.warning('secrets.py not found, Google auth won\'t work')
-
-

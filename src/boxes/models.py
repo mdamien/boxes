@@ -20,10 +20,10 @@ class Box(models.Model):
     )
     access_mode = models.IntegerField(choices=ACCESS_MODES, default=ACCESS_BY_SESSION)
     
-    user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
+    user_key = models.CharField(max_length=40) 
  
     #access restriction by email
-    email_suffix = models.CharField(max_length=100)
+    email_suffix = models.CharField(max_length=100, blank=True)
     email_list = models.TextField(blank=True) #comma-separated hashed mail list
     email_keys = models.TextField(blank=True) #comma-separated access keys list
 
@@ -49,7 +49,6 @@ class Box(models.Model):
         self.email_keys = ','.join(keys)
 
         self.save()
-
         return key
 
     def key_valid(self, key):
@@ -66,6 +65,9 @@ class Box(models.Model):
 
     def url(self):
         return reverse('boxes.views.box',args=(self.pk,))
+
+    def get_absolute_url(self):
+        return self.url()
     
     def __str__(self):
         return self.name

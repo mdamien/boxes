@@ -1,15 +1,18 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote, Comment
+from django.contrib.auth import logout as auth_logout
 from django import forms
 from boxes import helpers
 from django.views import generic
+import hashlib
 
 class HomepageView(generic.TemplateView):
     template_name = 'home.html'
 
     def post(self, request, *args, **kwargs):
         slug = helpers.randascii(6)
-        box = Box(slug=slug,name="My discussion box")
+        box = Box(slug=slug, name="My discussion box",
+                user_key=request.session.session_key)
         box.save()
         return HttpResponseRedirect(box.url())
 
@@ -18,12 +21,18 @@ home = HomepageView.as_view()
 class BoxMixin:
     def dispatch(self, request, *args, **kwargs):
         self.box = Box.objects.get(pk=kwargs['box_pk'])
-        self.user_key = request.session.session_key
+        self.user_key = None
+        if self.box.access_mode == Box.ACCESS_BY_SESSION:
+            self.user_key = request.session.session_key
+        if self.box.access_mode == Box.ACCESS_BY_GOOGLE and request.user.is_authenticated():
+            self.user_key = hashlib.sha1(request.user.username.encode('utf-8'))
+        if self.box.access_mode == Box.ACCESS_BY_EMAIL:
+            self.user_key = request.session.get('boxes_keys',{}).get(self.box.pk)
         return super(BoxMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return super(BoxMixin, self).get_context_data(
-                box=self.box, **kwargs)
+                user_key=self.user_key, box=self.box, **kwargs)
 
 class BoxView(BoxMixin, generic.ListView):
     template_name = 'box/home.html'
@@ -70,18 +79,22 @@ class SettingsForm(forms.ModelForm):
 
 class SettingsView(BoxMixin, generic.UpdateView):
     form_class = SettingsForm
-    pk_url_kwarg = 'box_pk'
-    model = Box
     template_name = 'box/settings.html'
+
+    def get_object(self, queryset=None):
+        return self.box
 
 settings = SettingsView.as_view()
 
-class BoxLogout(BoxMixin, generic. UpdateView):
+class BoxLogout(BoxMixin, generic.UpdateView):
     def post(self, request, *args, **kwargs):
-        keys = request.session.get('boxes_keys',{})
-        if self.box.pk in keys:
-            del keys[self.box.pk]
-        request.session['boxes_keys'] = keys
+        if self.box.access_mode == Box.ACCESS_BY_EMAIL:
+            keys = request.session.get('boxes_keys',{})
+            if self.box.pk in keys:
+                del keys[self.box.pk]
+            request.session['boxes_keys'] = keys
+        else:
+            auth_logout(request)
         return HttpResponseRedirect(self.box.url())
 
 logout = BoxLogout.as_view()
