@@ -25,3 +25,11 @@ def color(seed):
     """Return a random hue associated with the seed"""
     rand = random.Random(seed)
     return int(rand.random()*255)
+
+nothing_messages = [
+    "everyone's busy drinking tea",
+    'be the first and win nothing!',
+    "and it's maybe better this way",
+    "I will wait, don't worry",
+    "and you know what to do to solve this",
+]

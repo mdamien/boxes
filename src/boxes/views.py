@@ -40,6 +40,7 @@ class BoxView(BoxMixin, generic.ListView):
     
     def get_context_data(self, **kwargs):
         return super(BoxView, self).get_context_data(
+            nothing_msgs=helpers.nothing_messages,
             sort=self.kwargs['sort'], **kwargs)
 
     def get_queryset(self):

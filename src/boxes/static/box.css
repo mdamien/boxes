@@ -92,7 +92,7 @@ z-index: 10;
     border: none;
     padding: 5px 14px;
     color: white;
-    border-radius: 6px;
+    border-radius: 3px;
 }
 .pages {
     list-style: none;
@@ -274,3 +274,9 @@ div.request-form {
     cursor: pointer;
 }
 
+.nothing {
+    font-size: 20px;
+    color: rgb(162, 162, 162);
+    text-align: center;
+    margin-top: 60px;
+}

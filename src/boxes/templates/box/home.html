@@ -7,6 +7,7 @@
     <input type='submit' value='post' name='submit_idea'>
 </form>
 <br/>
+{% if ideas %}
 <ul class='pages'>
      <li {% if sort == 'hot' %}class='active'{% endif %}>
         <a href='{% url 'boxes.views.box' box.pk %}'>Hot</a>
@@ -36,6 +37,11 @@
             <a href="?page={{ ideas.next_page_number }}">&#5171;</a>
         {% endif %}
     </span>
+</div>
+{% endif %}
+{% else %}
+<div class='nothing'>
+    Nothing posted yet, {{ nothing_msgs|random }}
 </div>
 {% endif %}
 {% endblock %}
