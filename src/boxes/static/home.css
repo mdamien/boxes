@@ -8,7 +8,9 @@ h1, h2, h3, h4, h5, h6,body, button, input, select, textarea {
 
 .new-box {
 margin: auto;
-padding-top: 40px;
+max-width: 100%;
+padding-top: 10%;
+text-align: center;
 }
 
 
@@ -27,20 +29,20 @@ input[type="submit"]{
 font-weight: bold;
 margin-top: 30px;
 font-size: 2rem;
-display: block;
+/* display: block; */
 background: #FFA51A;
 border-radius: 4px;
 border: none;
-padding: 3px 27px;
+padding: 13px 57px;
 color: #FFFFFF;
 font-weight: 300;
 }
 
 .form-wrapper {
-    background: #498FDD;
-    color: white;
-    padding-bottom: 70px;
-    border-top: 10px solid #0A67CF;
+    /* background: #498FDD; */
+    /* color: white; */
+    /* padding-bottom: 70px; */
+    /* border-top: 10px solid #0A67CF; */
 }
 
 h3.title {
@@ -88,4 +90,13 @@ input[name="email-suffix"] {
 span.help {
     color: white;
     font-size: 10px;
+}
+
+.title span {
+color: #DF8700;
+font-weight: 500;
+}
+
+.title .without {
+    color: #CF0029;
 }

@@ -10,13 +10,13 @@
             >&#9660;</a>
     </div>
     <a class='idea-title' href='{{ idea.url }}'>{{ idea.title }}</a>
-    {% if request.session.session_key == idea.session_key %}
+    {% if request.session.session_key == idea.user_key %}
         <form class='delete-form' method='post' action='{% url 'boxes.views.delete_idea' box.pk idea.pk %}' >
             {% csrf_token %}
             <input type='submit' value='&#x2716;' />
         </form>
     {% endif %}
-    {% with idea.comment_set.count as N%}
+    {% with idea.comment_set.count as N %}
     {% if N > 0 %}
     <a href='{{ idea.url }}' class='comments-count'>&#128172;{{ N }}</a>
     {% endif %}

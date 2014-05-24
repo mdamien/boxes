@@ -3,18 +3,34 @@
 ## UX
 
 - [ ] Box access restriction by mail
-    - [x] Process
-    - [ ] Use it in box
 - [ ] Box access restriction by google account
-- [ ] Explain product on homepage
+- [ ] Explain product
 
 ## Code
 
-- [ ] Automated testing
+- [ ] Refactor views into class-based views
+- [ ] Add real testing suite
 
 # Little things to do
 
-- [ ] Comments tree 
 - [ ] Idea content and edit
-- [ ] Box sidebar with description, link to share and edit
+- [ ] Description & link to share
+- [ ] Comments tree 
+
+## Eternal things to do
+
+- [ ] Code cleanup [waiting for first release]
+- [ ] Browser compatibility test
+- [ ] Usable on mobile
+- [ ] Hover states
+- [ ] Refactor .css to nice .less
+- [ ] Security
+- [ ] Rate-limitation
+- [ ] Moderation tools (as admin)
+
+and
+
+- [ ] Transform the whole thing into a API driven application
+- [ ] Save unicorns in the mean time 
+- [ ] Be cool and stop doing things that work
 

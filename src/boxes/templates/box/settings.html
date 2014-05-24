@@ -1,0 +1,56 @@
+{% extends 'box/base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'settings.css' %}">
+{% endblock %}
+
+{% block box %}
+<div class='settings'>
+    <h3>Box settings</h3>
+    <form  method="post" action="">
+        {% csrf_token %}
+        <p>
+            <label for="id_name">Name:</label> <input id="id_name" maxlength="300" name="name" type="text" value="Hello">
+        </p>
+        <p>
+            <label for="id_access_mode">How people can participate ?</label>
+        <input type='hidden' name='access_mode' value='{{ box.access_mode }}' />
+        <div class="access_mode_choices">
+            <div data-value="0" {% if box.access_mode == 0 %}class='selected'{% endif %}>
+                <strong>No restriction</strong>
+                <em>Anyone can participate without any authentification</em>
+            </div><div data-value="1" {% if box.access_mode == 1 %}class='selected'{% endif %} >
+                <strong>Require google account</strong>
+                <em>To save you from spam</em>
+            </div>
+            <div data-value="2" {% if box.access_mode == 2 %}class='selected'{% endif %}>
+                <strong>Require signup via email from specific domain</strong>
+                <em>Example: @stanford.edu or @apple.com</em>
+            </div>
+
+        </div></p>
+        <p class='email_suffix_box'  {% if box.access_mode != 2 %}style='display:none'{% endif %} ><label for="id_email_suffix">Email domain:</label> <input id="id_email_suffix" maxlength="100" name="email_suffix" type="text"></p>
+        <input type="submit" value="Save">
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script>
+$('.access_mode_choices > div').off();
+$('.access_mode_choices > div').click(function(e){
+    $('.access_mode_choices > div').removeClass('selected');
+    $(this).addClass('selected')
+    var value = $(this).attr('data-value');
+    $('input[name="access_mode"]').attr('value',value)
+    if(value == '2'){
+        $('.email_suffix_box').show()
+    }else{
+        $('.email_suffix_box').hide()
+    }
+})
+</script>
+{% endblock %}

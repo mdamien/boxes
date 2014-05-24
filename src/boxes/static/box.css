@@ -271,3 +271,10 @@ div.request-form {
     background: #FFB646;
 }
 
+.customize {
+    background: #72A9E5;
+    float: right;
+    padding: 0px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}

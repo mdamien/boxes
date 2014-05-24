@@ -17,4 +17,4 @@ Boxes
     python manage.py syncdb
     python manage.py runserver
 
-
+Note: **Require Python 3**

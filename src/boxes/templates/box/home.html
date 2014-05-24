@@ -3,7 +3,7 @@
 {% block box %}
 <form class='idea-form' method='post' action=''>
     {% csrf_token %}
-    <input type='text' name='title' placeholder='Enter a new idea here' />
+    <input type='text' name='title' placeholder='Enter a new post here' autocomplete="off" />
     <input type='submit' value='post' name='submit_idea'>
 </form>
 <br/>

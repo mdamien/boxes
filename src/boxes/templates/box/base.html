@@ -7,6 +7,7 @@
     <div class='row'>
     <a class='logo' href='/' title='kioto.io'>k</a>
     <a class='box-name' href='{{ box.url }}'>{{ box }}</a>
+    <a class="customize" href='{% url 'boxes.views.settings' box.pk %}'>Customize</a>
     {% if not box.is_access_by_session and not hide_logout%}
     <form method='post' class='logout' action='{% url 'boxes.views.logout' box.pk %}'>
         {% csrf_token %}

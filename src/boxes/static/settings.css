@@ -1,0 +1,44 @@
+.settings {
+    background: #fff; border: 1px solid; border-color: #e5e6e9 #dfe0e4 #d0d1d5; border-radius: 3px; margin: 2px; padding: 5px 10px; border-left-width: 3px;
+}
+.settings h3 {
+    font-size: 1.6em;
+    color: #074891;
+}
+select#id_access_mode {
+    display: none;
+}
+.settings label {
+    font-weight: bold;
+}
+.access_mode_choices > div {
+    background: rgb(219, 219, 219);
+    margin: 10px;
+    padding: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.access_mode_choices em {
+    display: block;
+}
+
+input[type="submit"] {
+background: #FF9A00;
+border: none;
+padding: 7px 21px;
+color: white;
+border-radius: 3px;
+}
+
+.access_mode_choices > div.selected {
+    background: #2579D6;
+    color: white;
+}
+
+.access_mode_choices > div.selected {
+    background: #2579D6;
+    color: white;
+}ccess_mode_choices > div.selected {
+    background: #2579D6;
+    color: white;
+}

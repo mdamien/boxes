@@ -9,20 +9,9 @@
 {% block content %}
 <div class='form-wrapper'>
 <form method='post' action='' class='new-box row'>
-<h3 class='title'>Create a discussion box</h3>
+    <h3 class='title'>Discuss about <span class='X'>anything</span> with <span class='Y'>any group</span></h3>
 {% csrf_token %}
-<input type='text' name='name' autofocus placeholder='Enter box name here'/>
-<h5 class='access-method-title'>Access restriction</h5>
-<input type='hidden' name='access-method' value='session'/>
-<ul class='choices'>
-    <li class='selected' data-value='session'>No restriction</li>
-    <li data-value='google'>Require google account</li>
-    <li data-value='email'>Require specific mail domain</li>
-</ul>
-<div class='email-restrict' style='display:none;'>
-    <span>@</span><input type='text' name='email-suffix' placeholder='company.com'/>
-</div>
-<input type='submit' value='Create'/>
+<input type='submit' value='Create a discussion box'/>
 </form>
 </div>
 
@@ -34,16 +23,32 @@
 {% block js %}
 {{ block.super }}
 <script>
-$('.choices li').click(function(e){
-    $('.choices li').removeClass('selected');
-    $(this).addClass('selected')
-    var value = $(this).attr('data-value');
-    $('input[name="access-method"]').attr('value',value)
-    if(value == 'email'){
-        $('.email-restrict').show()
-    }else{
-        $('.email-restrict').hide()
-    }
-})
+var cases = [
+    ['your favorite pornstars', 'your colleagues'],
+    ['this boring course', 'your classmates'],
+    ['life issues', 'your friends'],
+    ['the question to ask', 'other attendees'],
+    ['city issues', 'other citizens'],
+    ['programming', 'colleagues <span class="without">without sexism</span>'],
+    ['music', 'your neighbors'],
+]
+
+var current = -1;
+
+function swap(){
+    current = (current + 1) % cases.length;
+    c = cases[current];
+    $('.X').fadeOut(200, function(){
+        $('.X').html(c[0])
+        $('.X').fadeIn()
+    })
+    $('.Y').fadeOut(200, function(){
+        $('.Y').html(c[1])
+        $('.Y').fadeIn()
+    })
+}
+
+setInterval(swap, 5000);
+setTimeout(swap, 2000);
 </script>
 {% endblock %}
