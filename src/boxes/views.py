@@ -1,61 +1,8 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote, Comment
-from django.views.decorators.http import require_POST
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-from django.contrib import messages
 from django import forms
 from boxes import helpers
-from boxes import decorators
 from django.views import generic
-
-@decorators.idea
-def idea(request, box_pk, idea_pk, idea=None):
-    user_key = request.session.session_key
-    vote = Vote.objects.filter(idea=idea, user_key=user_key).first()
-    if request.method == 'POST':
-        comment = Comment(idea=idea, user_key=user_key, content=request.POST.get('content'))
-        comment.save()
-
-    if vote:
-        idea.user_vote = vote.vote
-    return render(request,'box/idea.html',{
-        'idea':idea, 
-        'box':idea.box,
-        'user_key':user_key,
-    })
-
-@require_POST
-@decorators.box
-def logout(request, box_pk, box=None, user_key=None):
-    keys = request.session.get('boxes_keys',{})
-    if box_pk in keys:
-        del keys[box_pk]
-    request.session['boxes_keys'] = keys
-    return HttpResponseRedirect(box.url())
-
-@require_POST
-@decorators.idea
-def idea_delete(request, box_pk, idea_pk, idea=None, user_key=None):
-    idea.delete()
-    return HttpResponseRedirect(idea.box.url())
-
-@require_POST
-@decorators.idea
-def idea_vote(request, box_pk, idea_pk, vote, idea=None, user_key=None):
-    session_key = request.session.session_key
-    try:
-        current_vote = Vote.objects.get(user_key=session_key, idea=idea)
-        current_vote.delete()
-    except Vote.DoesNotExist:
-        pass
-    vote = Vote(idea=idea, user_key=session_key, vote=Vote.from_str(vote))
-    vote.save()
-    idea.update_cached_score()
-    return HttpResponse(str(idea.score()))
 
 class HomepageView(generic.TemplateView):
     template_name = 'home.html'
@@ -99,7 +46,7 @@ class BoxView(BoxMixin, generic.ListView):
                 idea.hot_score = idea.compute_hot_score()
             ideas.sort(key=lambda x: x.hot_score, reverse=True)
         
-        #add user current vote
+        #TODO: Do it after pagination
         votes = Vote.objects.filter(user_key=self.user_key)
         for idea in ideas:
             for vote in votes:
@@ -121,10 +68,68 @@ class SettingsForm(forms.ModelForm):
         model = Box
         fields = ('name','access_mode','email_suffix')
 
-class SettingsView(generic.UpdateView):
+class SettingsView(BoxMixin, generic.UpdateView):
     form_class = SettingsForm
     pk_url_kwarg = 'box_pk'
     model = Box
     template_name = 'box/settings.html'
 
 settings = SettingsView.as_view()
+
+class BoxLogout(BoxMixin, generic. UpdateView):
+    def post(self, request, *args, **kwargs):
+        keys = request.session.get('boxes_keys',{})
+        if self.box.pk in keys:
+            del keys[self.box.pk]
+        request.session['boxes_keys'] = keys
+        return HttpResponseRedirect(self.box.url())
+
+logout = BoxLogout.as_view()
+
+class IdeaMixin(BoxMixin):
+    def dispatch(self, request, *args, **kwargs):
+        self.idea = Idea.objects.get(pk=kwargs['idea_pk'])
+        """
+        vote = Vote.objects.filter(idea=idea, user_key=self.user_key).first()
+        if vote:
+            self.idea.user_vote = vote.vote
+        """
+        return super(IdeaMixin, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        return super(IdeaMixin, self).get_context_data(
+                idea=self.idea, **kwargs)
+
+class IdeaView(IdeaMixin, generic.TemplateView):
+    template_name = 'box/idea.html'
+
+    def post(self, request, *args, **kwargs):
+        comment = Comment(idea=self.idea, user_key=self.user_key, content=request.POST.get('content'))
+        comment.save()
+        return self.get(request, *args, **kwargs)
+
+idea = IdeaView.as_view()
+
+class IdeaVote(IdeaMixin, generic.View):
+    def post(self, request, *args, **kwargs):
+        try:
+            current_vote = Vote.objects.get(
+                    user_key=self.user_key, idea=self.idea)
+            current_vote.delete()
+        except Vote.DoesNotExist:
+            pass
+        vote = Vote(idea=self.idea,
+                user_key=self.user_key,
+                vote=Vote.from_str(kwargs['vote']))
+        vote.save()
+        self.idea.update_cached_score()
+        return HttpResponse(str(self.idea.score()))
+
+idea_vote = IdeaVote.as_view()
+
+class IdeaDelete(IdeaMixin, generic.View):
+    def post(self, request, *args, **kwargs):
+        self.idea.delete()
+        return HttpResponseRedirect(self.idea.box.url())
+
+idea_delete = IdeaDelete.as_view()
