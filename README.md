@@ -18,3 +18,8 @@ Boxes [![Build Status](https://travis-ci.org/MDamien/boxes.png?branch=master)](h
     python manage.py runserver
 
 Note: **Require Python 3**
+
+### Secrets
+
+Secrets are put in `config/settings/secrets.py`
+

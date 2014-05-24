@@ -10,33 +10,11 @@ from django.contrib import messages
 from django import forms
 from boxes import helpers
 from boxes import decorators
-
-def join(request, box_pk):
-    """Join box via mail"""
-    box = get_object_or_404(Box, pk=box_pk)
-    if request.method == 'POST':
-        if request.POST.get('request-key'):
-            email = request.POST.get('email')
-            try:
-                key = box.email_register(email)
-                send_mail('kioto.io: Access code for "%s"' % box.name,key,
-                      'no-reply@kioto.io',[email], fail_silently=False)
-                messages.add_message(request, messages.SUCCESS, 'Access code sent to %s' % email)
-            except ValidationError as e:
-                messages.add_message(request, messages.ERROR, e.message)
-        else:
-            if box.key_valid(request.POST.get('key')):
-                keys = request.session.get('boxes_keys',{})
-                keys[box.pk] = request.POST.get('key')
-                request.session['boxes_keys'] = keys
-                return HttpResponseRedirect(box.url())
-            else:
-                messages.add_message(request, messages.ERROR, 'Invalid access code')
-
-    return render(request, 'box/join.html', { 'box': box, 'hide_logout':True})
+from django.views import generic
 
 @decorators.idea
-def idea(request, box_pk, idea_pk, idea=None, user_key=None):
+def idea(request, box_pk, idea_pk, idea=None):
+    user_key = request.session.session_key
     vote = Vote.objects.filter(idea=idea, user_key=user_key).first()
     if request.method == 'POST':
         comment = Comment(idea=idea, user_key=user_key, content=request.POST.get('content'))
@@ -61,13 +39,13 @@ def logout(request, box_pk, box=None, user_key=None):
 
 @require_POST
 @decorators.idea
-def delete_idea(request, box_pk, idea_pk, idea=None, user_key=None):
+def idea_delete(request, box_pk, idea_pk, idea=None, user_key=None):
     idea.delete()
     return HttpResponseRedirect(idea.box.url())
 
 @require_POST
 @decorators.idea
-def vote(request, box_pk, idea_pk, vote, idea=None, user_key=None):
+def idea_vote(request, box_pk, idea_pk, vote, idea=None, user_key=None):
     session_key = request.session.session_key
     try:
         current_vote = Vote.objects.get(user_key=session_key, idea=idea)
@@ -121,29 +99,44 @@ def box(request, box_pk, sort='top', box=None, user_key=None):
         'sort':sort,
     })
 
+
+
+
+
+
+
+class HomepageView(generic.TemplateView):
+    template_name = 'home.html'
+
+    def post(self, request, *args, **kwargs):
+        slug = helpers.randascii(6)
+        box = Box(slug=slug,name="My discussion box")
+        box.save()
+        return HttpResponseRedirect(box.url())
+
+home = HomepageView.as_view()
+
+class BoxMixin:
+    def get_context_data(self, **kwargs):
+        self.box = Box.objects.get(pk=self.kwargs['box_pk'])
+        return super(BoxMixin, self).get_context_data(box=self.box)
+
+class BoxView(BoxMixin, generic.ListView):
+    model = Box
+    template_name = 'box/home.html'
+
+
+box = BoxView.as_view()
+
 class SettingsForm(forms.ModelForm): 
     class Meta:
         model = Box
         fields = ('name','access_mode','email_suffix')
 
-@decorators.box
-def settings(request, box_pk, box=None):
-    form = SettingsForm(instance=box)
-    if request.method == 'POST':
-        form = SettingsForm(data=request.POST, instance=box)
-        if form.is_valid():
-            form.save()
-    return render(request,'box/settings.html', {
-        'box':box,
-        'form':form,
-        })
+class SettingsView(generic.UpdateView):
+    form_class = SettingsForm
+    pk_url_kwarg = 'box_pk'
+    model = Box
+    template_name = 'box/settings.html'
 
-
-def home(request):
-    if request.method == 'POST':
-        slug = helpers.randascii(6)
-        box = Box(slug=slug,name="")
-        box.save()
-        return HttpResponseRedirect(box.url())
-    return render(request,'home.html')
-
+settings = SettingsView.as_view()

@@ -1,5 +1,7 @@
 import os
 from os.path import join
+import logging
+logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
@@ -73,3 +75,13 @@ STATIC_ROOT = join(PROJECT_DIR,'static')
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
 )
+
+try:
+    #this file is unversionned and contains secrets such SECRET_KEY or database credentials
+    import config.settings.secrets as secrets
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
+except ImportError:
+    logger.warning('secrets.py not found, Google auth won\'t work')
+
+

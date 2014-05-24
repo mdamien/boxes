@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ box }}{% endblock %}
+{% block title %}{% if box %}{{ box }} - {% endif %}{{ block.super }}{% endblock %}
 
 {% block content %}
 <div class='header'>

@@ -11,9 +11,9 @@
      <li {% if sort == 'hot' %}class='active'{% endif %}>
         <a href='{% url 'boxes.views.box' box.pk %}'>Hot</a>
     </li><li {% if sort == 'top' %}class='active'{% endif %}>
-        <a href='{% url 'sort_top' box.pk %}'>Top</a>
+        <a href='{% url 'list_top' box.pk %}'>Top</a>
     </li><li {% if sort == 'new' %}class='active'{% endif %}>
-        <a href='{% url 'sort_new' box.pk %}'>New</a>
+        <a href='{% url 'list_new' box.pk %}'>New</a>
     </li>
 </ul>
 <ol class='ideas'>

@@ -104,22 +104,17 @@ z-index: 10;
     background: rgb(214, 214, 214);
     color: rgb(117, 117, 117);
     padding: 0px 7px;
-    border-radius: 0 8px 0 0;
-    z-index: 0;
-    position: relative;
-    margin-left: -6px;
     cursor:pointer;
+    margin-right: 6px;
 }
 
 
 .pages .active {
     color: white;
     background: #498FDD;
-    z-index: 2;
 }
 
 .pages li:first-child {
-        margin: 0;
 }
 
 .pages a {
@@ -278,3 +273,4 @@ div.request-form {
     border-radius: 3px;
     cursor: pointer;
 }
+

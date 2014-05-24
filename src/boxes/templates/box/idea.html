@@ -1,6 +1,6 @@
 {% extends 'box/base.html' %}
 
-{% block title %}{{ box }} - {{ idea.title }}{% endblock %}
+{% block title %}{{ idea.title }} - {{ block.super }}{% endblock %}
 
 {% block box %}
 <style>
