@@ -19,8 +19,8 @@ class HomepageView(generic.TemplateView):
         box = Box(slug=slug, name="",
                 user_key=request.session.session_key)
         box.save()
-#        messages.add_message(request, messages.SUCCESS,
-#                'Box created, you can now share it:  %s' % request.build_absolute_uri(box.url()))
+        messages.add_message(request, messages.SUCCESS,
+                'Box created, you can now share it:  %s' % request.build_absolute_uri(box.url()))
         return HttpResponseRedirect(reverse('boxes.views.settings', args=(box.slug,)))
 
 home = HomepageView.as_view()
