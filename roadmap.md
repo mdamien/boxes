@@ -2,7 +2,6 @@
 
 ## UX
 
-- [ ] Box slug as url
 - [ ] Idea content and edit
 - [ ] Box description & link to share
 

@@ -64,7 +64,7 @@ class Box(models.Model):
         return self.access_mode == self.ACCESS_BY_GOOGLE
 
     def url(self):
-        return reverse('boxes.views.box',args=(self.pk,))
+        return reverse('boxes.views.box',args=(self.slug,))
 
     def get_absolute_url(self):
         return self.url()
@@ -100,7 +100,7 @@ class Idea(models.Model):
         self.save()
 
     def url(self):
-        return reverse('boxes.views.idea',args=(self.box_id, self.pk,))
+        return reverse('boxes.views.idea',args=(self.box.slug, self.pk,))
     
     def __str__(self):
         return self.title

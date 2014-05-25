@@ -8,10 +8,10 @@
     <a class='logo' href='/' title='kioto.io'>k</a>
     <a class='box-name' href='{{ box.url }}'>{{ box }}</a>
     {% if request.session.session_key == box.user_key %} 
-    <a class="customize" href='{% url 'boxes.views.settings' box.pk %}'>Customize</a>
+    <a class="customize" href='{% url 'boxes.views.settings' box.slug %}'>Customize</a>
     {% endif %}
     {% if not box.is_access_by_session and user_key %}
-    <form method='post' class='logout' action='{% url 'boxes.views.logout' box.pk %}'>
+    <form method='post' class='logout' action='{% url 'boxes.views.logout' box.slug %}'>
         {% csrf_token %}
         <input type='submit' value='logout'/>
     </form>

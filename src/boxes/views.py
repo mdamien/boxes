@@ -15,19 +15,19 @@ class HomepageView(generic.TemplateView):
     template_name = 'home.html'
 
     def post(self, request, *args, **kwargs):
-        slug = helpers.randascii(6)
+        slug = helpers.randascii(4)
         box = Box(slug=slug, name="",
                 user_key=request.session.session_key)
         box.save()
 #        messages.add_message(request, messages.SUCCESS,
 #                'Box created, you can now share it:  %s' % request.build_absolute_uri(box.url()))
-        return HttpResponseRedirect(reverse('boxes.views.settings', args=(box.pk,)))
+        return HttpResponseRedirect(reverse('boxes.views.settings', args=(box.slug,)))
 
 home = HomepageView.as_view()
 
 class BoxMixin:
     def dispatch(self, request, *args, **kwargs):
-        self.box = Box.objects.get(pk=kwargs['box_pk'])
+        self.box = Box.objects.get(slug=kwargs['box_slug'])
         self.user_key = None
         if self.box.access_mode == Box.ACCESS_BY_SESSION:
             self.user_key = request.session.session_key
