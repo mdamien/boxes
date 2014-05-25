@@ -199,7 +199,7 @@ border-radius: 3px;
     background: none;
 }
 .access-header {
-    background: #F50030;
+    background: #FFA51A;
     color: white;
     padding: 6px 0px;
     position: relative;
@@ -279,4 +279,20 @@ div.request-form {
     color: rgb(162, 162, 162);
     text-align: center;
     margin-top: 60px;
+}
+
+input[type="email"] {
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dotted white;
+}
+.access-header form {
+    display: inline;
+}
+input[type="email"]:focus {
+    outline: none;
 }

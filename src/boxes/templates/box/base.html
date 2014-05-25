@@ -7,7 +7,7 @@
     <div class='row'>
     <a class='logo' href='/' title='kioto.io'>k</a>
     <a class='box-name' href='{{ box.url }}'>{{ box }}</a>
-    {% if user_key == box.user_key %} 
+    {% if request.session.session_key == box.user_key %} 
     <a class="customize" href='{% url 'boxes.views.settings' box.pk %}'>Customize</a>
     {% endif %}
     {% if not box.is_access_by_session and user_key %}
@@ -21,11 +21,15 @@
 {% block extra-headers %}
 {% if not user_key %}
 <div class="access-header">
-    <h5 class="row">To participate
+    <h5 class="row">To participate,
         {% if box.access_mode == box.ACCESS_BY_GOOGLE %}
         <a href="{% url 'social:begin' "google" %}?next={{ request.path }}">Login with Google</a>
         {% else %}
-           enter the fucking mail 
+        enter your mail:
+        <form action='{{ box.url }}' method='post'>
+            {% csrf_token %}
+            <input type='email' name='email' value='@{{ box.email_suffix }}'/>
+        </form>
         {% endif %}
     </h5>
 </div>

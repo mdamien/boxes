@@ -1,6 +1,9 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from boxes.models import Box, Idea, Vote, Comment
 from django.contrib.auth import logout as auth_logout
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.contrib import messages
 from django import forms
 from boxes import helpers
 from django.views import generic
@@ -27,7 +30,13 @@ class BoxMixin:
         if self.box.access_mode == Box.ACCESS_BY_GOOGLE and request.user.is_authenticated():
             self.user_key = hashlib.sha1(request.user.username.encode('utf-8'))
         if self.box.access_mode == Box.ACCESS_BY_EMAIL:
-            self.user_key = request.session.get('boxes_keys',{}).get(self.box.pk)
+            if 'key' in request.GET:
+                key = request.GET.get('key')
+                if self.box.key_valid(key):
+                    keys = request.session.get('boxes_keys', {})
+                    keys[str(self.box.pk)] = key
+                    request.session['boxes_keys'] = keys
+            self.user_key = request.session.get('boxes_keys',{}).get(str(self.box.pk))
         return super(BoxMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -66,9 +75,20 @@ class BoxView(BoxMixin, generic.ListView):
         return ideas
 
     def post(self, request, *args, **kwargs):
-        idea = Idea(box=self.box, title=request.POST.get('title'), 
-                user_key=self.user_key)
-        idea.save()
+        if 'email' in request.POST:
+            email = request.POST.get('email')
+            try:
+                key = self.box.email_register(email)
+                send_mail('kioto.io: Access code for "%s"' % self.box.name,
+                        'https://kioto.io'+ self.box.url() + "?key=" + key,
+                        'no-reply@kioto.io', [email], fail_silently=False)
+                messages.add_message(request, messages.SUCCESS, 'Access code sent to %s' % email)
+            except ValidationError as e:
+                messages.add_message(request, messages.ERROR, e.message)
+        else:
+            idea = Idea(box=self.box, title=request.POST.get('title'), 
+                    user_key=self.user_key)
+            idea.save()
         return self.get(request, *args, **kwargs)
 
 box = BoxView.as_view()
@@ -91,8 +111,8 @@ class BoxLogout(BoxMixin, generic.UpdateView):
     def post(self, request, *args, **kwargs):
         if self.box.access_mode == Box.ACCESS_BY_EMAIL:
             keys = request.session.get('boxes_keys',{})
-            if self.box.pk in keys:
-                del keys[self.box.pk]
+            if str(self.box.pk) in keys:
+                del keys[str(self.box.pk)]
             request.session['boxes_keys'] = keys
         else:
             auth_logout(request)

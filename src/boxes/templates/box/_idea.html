@@ -6,11 +6,11 @@
             >&#9650;</a>
         <span class='score'>{{ idea.score }}</span>{{ idea.user_vote.vote }}
         <a onclick="vote('down',{{ idea.pk }},'{% url 'boxes.views.idea_vote' box.pk idea.pk 'down' %}')" class='vote-down
-            {% if idea.user_vote == -1 %}current-vote{% endif %}'
+    {% if idea.user_vote == -1 %}current-vote{% endif %}'
             >&#9660;</a>
     </div>
     <a class='idea-title' href='{{ idea.url }}'>{{ idea.title }}</a>
-    {% if request.session.session_key == idea.user_key %}
+    {% if user_key == idea.user_key %}
         <form class='delete-form' method='post' action='{% url 'boxes.views.idea_delete' box.pk idea.pk %}' >
             {% csrf_token %}
             <input type='submit' value='&#x2716;' />
