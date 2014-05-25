@@ -8,7 +8,7 @@ from boxes import helpers
 
 class Box(models.Model):
     slug = models.SlugField(unique=True)
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, blank=True)
 
     ACCESS_BY_SESSION = 0
     ACCESS_BY_EMAIL = 1
@@ -23,7 +23,7 @@ class Box(models.Model):
     user_key = models.CharField(max_length=40) 
  
     #access restriction by email
-    email_suffix = models.CharField(max_length=100, blank=True)
+    email_suffix = models.CharField(max_length=100, blank=True, null=True)
     email_list = models.TextField(blank=True) #comma-separated hashed mail list
     email_keys = models.TextField(blank=True) #comma-separated access keys list
 

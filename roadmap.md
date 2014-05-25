@@ -2,7 +2,9 @@
 
 ## UX
 
-- [ ] Explain product
+- [ ] Box slug as url
+- [ ] Idea content and edit
+- [ ] Box description & link to share
 
 ## Code
 
@@ -10,23 +12,14 @@
 
 # Little things to do
 
-- [ ] Idea content and edit
-- [ ] Box description & link to share
 - [ ] Comments tree 
 
-## Eternal things to do
+## A little bit of finish
 
-- [ ] Browser compatibility test
-- [ ] Usable on mobile
-- [ ] Hover states
-- [ ] Security
+- [ ] Form validation and handling
+    - [ ] Settings
+    - [ ] Post & Comment
+- [ ] Browser compatibility test *alarrache*
+- [ ] Usable on mobile *chezmoicafonctionne*
 - [ ] Rate-limitation
-
-and
-
-- [ ] Moderation tools (as admin)
-- [ ] HTML/CSS/JS cleanup
-- [ ] Transform the whole thing into a API driven application
-- [ ] Save unicorns in the mean time 
-- [ ] Be cool and stop doing things that work
 

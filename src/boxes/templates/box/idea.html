@@ -24,11 +24,13 @@ margin-top:20px;
 </style>
 {% include 'box/_idea.html' with full=True %}
 <h5>Comments</h5>
+{% if user_key %}
 <form class='idea-form' method='post' action=''>
     {% csrf_token %}
     <input type='text' name='content' placeholder='Enter a comment here' />
     <input type='submit' value='post'>
 </form>
+{% endif %}
 <ol class='comments'>
 {% for comment in idea.comment_set.all %}
     <li class='comment' style='border-left-color: hsla({{ comment.color }},90%,55%,1)'>{{ comment.content }}</li>

@@ -34,7 +34,7 @@ body{
     color: white;
 }
 
-.box-name:hover, .pages a:hover{
+.pages a:hover{
     text-decoration:none;
 }
 
@@ -303,3 +303,4 @@ input[type="email"]:focus {
     text-decoration: none;
     background: #074891;
 }
+

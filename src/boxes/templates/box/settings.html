@@ -13,7 +13,7 @@
         {{ form.errors }}
         {% csrf_token %}
         <p>
-        <label for="id_name">Name:</label> <input id="id_name" maxlength="300" name="name" type="text" value="{{ box.name }}">
+        <label for="id_name">Name:</label> <input id="id_name" autofocus maxlength="300" name="name" type="text" value="{{ box.name }}">
         </p>
         <p>
             <label for="id_access_mode">How people can participate ?</label>
@@ -32,7 +32,7 @@
             </div>
 
         </div></p>
-        <p class='email_suffix_box'  {% if box.access_mode != 1 %}style='display:none'{% endif %} ><label for="id_email_suffix">Email domain:</label> <input id="id_email_suffix" maxlength="100" name="email_suffix" type="text" value="{{ box.email_suffix }}"></p>
+        <p class='email_suffix_box'  {% if box.access_mode != 1 %}style='display:none'{% endif %} ><label for="id_email_suffix">Email domain:</label> <input id="id_email_suffix" maxlength="100" placeholder='your-domain.com' name="email_suffix" type="text" value="{% if box.email_suffix %}{{box.email_suffix}}{% endif %}"></p>
         <input type="submit" value="Save">
     </form>
 </div>

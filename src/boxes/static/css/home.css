@@ -2,13 +2,13 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 300;
-  src: local('Open Sans Light'), local('OpenSans-Light'), url(opensans300.woff) format('woff');
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/opensans300.woff) format('woff');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(opensans400.woff) format('woff');
+  src: local('Open Sans'), local('OpenSans'), url(fonts/opensans400.woff) format('woff');
 }
 
 

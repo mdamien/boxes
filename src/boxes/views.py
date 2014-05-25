@@ -1,8 +1,10 @@
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from boxes.models import Box, Idea, Vote, Comment
 from django.contrib.auth import logout as auth_logout
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+from django.core.validators import RegexValidator
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django import forms
 from boxes import helpers
@@ -14,12 +16,12 @@ class HomepageView(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         slug = helpers.randascii(6)
-        box = Box(slug=slug, name="My discussion box",
+        box = Box(slug=slug, name="",
                 user_key=request.session.session_key)
         box.save()
-        messages.add_message(request, messages.SUCCESS,
-                'Box created, you can now share it:  %s' % request.build_absolute_uri(box.url()))
-        return HttpResponseRedirect(box.url())
+#        messages.add_message(request, messages.SUCCESS,
+#                'Box created, you can now share it:  %s' % request.build_absolute_uri(box.url()))
+        return HttpResponseRedirect(reverse('boxes.views.settings', args=(box.pk,)))
 
 home = HomepageView.as_view()
 
@@ -109,6 +111,22 @@ class SettingsForm(forms.ModelForm):
         model = Box
         fields = ('name','access_mode','email_suffix')
 
+    validate_hostname = RegexValidator(regex=r'[a-zA-Z0-9-_]*\.[a-zA-Z]{2,6}',
+        message="Enter a valid domain name")
+
+    def clean_email_suffix(self):
+        access_mode = self.cleaned_data['access_mode']
+        domain = super(SettingsForm, self).clean()
+        if access_mode == Box.ACCESS_BY_EMAIL:
+            self.validate_hostname(domain)
+
+    def clean(self):
+        cleaned_data = super(SettingsForm, self).clean()
+        if self.instance.access_mode != cleaned_data['access_mode'] \
+                and self.instance.idea_set.count() > 0:
+            raise ValidationError("You can't change the access mode when there are posts in the box")
+        return cleaned_data
+
 class SettingsView(BoxMixin, generic.UpdateView):
     form_class = SettingsForm
     template_name = 'box/settings.html'
@@ -137,10 +155,12 @@ logout = BoxLogout.as_view()
 
 class IdeaMixin(BoxMixin):
     def dispatch(self, request, *args, **kwargs):
-        self.idea = Idea.objects.get(pk=kwargs['idea_pk'])
         return super(IdeaMixin, self).dispatch(request, *args, **kwargs)
     
     def pre_process(self, request, *args, **kwargs):
+        self.idea = Idea.objects.get(pk=kwargs['idea_pk'])
+        if self.idea.box_id != self.box.pk:
+            return HttpResponseNotFound()
         vote = Vote.objects.filter(idea=self.idea, user_key=self.user_key).first()
         if vote:
             self.idea.user_vote = vote.vote
@@ -178,6 +198,8 @@ idea_vote = IdeaVote.as_view()
 
 class IdeaDelete(IdeaMixin, generic.View):
     def post(self, request, *args, **kwargs):
+        if self.user_key != self.idea.user_key:
+            return HttpResponseForbidden("You aren't the owner of this post")
         self.idea.delete()
         return HttpResponseRedirect(self.idea.box.url())
 

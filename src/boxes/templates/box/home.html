@@ -1,11 +1,13 @@
 {% extends 'box/base.html' %}
 
 {% block box %}
+{% if user_key %}
 <form class='idea-form' method='post' action=''>
     {% csrf_token %}
-    <input type='text' name='title' placeholder='Enter a new post here' autocomplete="off" />
+    <input type='text' name='title' autofocus placeholder='Enter a new post here' autocomplete="off" />
     <input type='submit' value='post' name='submit_idea'>
 </form>
+{% endif %}
 <br/>
 {% if ideas %}
 <ul class='pages'>
