@@ -296,3 +296,10 @@ input[type="email"] {
 input[type="email"]:focus {
     outline: none;
 }
+.idea-form input[type="submit"]:hover {
+    background: #DF8700;
+}
+.customize:hover {
+    text-decoration: none;
+    background: #074891;
+}

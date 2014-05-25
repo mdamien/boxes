@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from boxes.models import Box, Idea, Vote, Comment
 from django.contrib.auth import logout as auth_logout
 from django.core.exceptions import ValidationError
@@ -37,7 +37,13 @@ class BoxMixin:
                     keys[str(self.box.pk)] = key
                     request.session['boxes_keys'] = keys
             self.user_key = request.session.get('boxes_keys',{}).get(str(self.box.pk))
+        result = self.pre_process(request, *args, **kwargs)
+        if result:
+            return result
         return super(BoxMixin, self).dispatch(request, *args, **kwargs)
+
+    def pre_process(self, request, *args, **kwargs):
+        pass
 
     def get_context_data(self, **kwargs):
         return super(BoxMixin, self).get_context_data(
@@ -48,9 +54,20 @@ class BoxView(BoxMixin, generic.ListView):
     context_object_name = 'ideas'
     
     def get_context_data(self, **kwargs):
-        return super(BoxView, self).get_context_data(
+        context = super(BoxView, self).get_context_data(
             nothing_msgs=helpers.nothing_messages,
             sort=self.kwargs['sort'], **kwargs)
+
+        #add vote data
+        ideas = context.get('ideas')
+        votes = Vote.objects.filter(user_key=self.user_key)
+        for idea in ideas:
+            for vote in votes:
+                if vote.idea_id == idea.pk:
+                    idea.user_vote = vote.vote
+        context['ideas'] = ideas
+
+        return context
 
     def get_queryset(self):
         ideas = Idea.objects.filter(box=self.box) 
@@ -64,14 +81,6 @@ class BoxView(BoxMixin, generic.ListView):
             for idea in ideas:
                 idea.hot_score = idea.compute_hot_score()
             ideas.sort(key=lambda x: x.hot_score, reverse=True)
-        
-        #TODO: Do it after pagination
-        votes = Vote.objects.filter(user_key=self.user_key)
-        for idea in ideas:
-            for vote in votes:
-                if vote.idea_id == idea.pk:
-                    idea.user_vote = vote.vote
-        
         return ideas
 
     def post(self, request, *args, **kwargs):
@@ -102,6 +111,10 @@ class SettingsView(BoxMixin, generic.UpdateView):
     form_class = SettingsForm
     template_name = 'box/settings.html'
 
+    def pre_process(self, request, *args, **kwargs):
+        if request.session.session_key != self.box.user_key:
+            return HttpResponseForbidden("You are not the owner of this box")
+
     def get_object(self, queryset=None):
         return self.box
 
@@ -123,12 +136,12 @@ logout = BoxLogout.as_view()
 class IdeaMixin(BoxMixin):
     def dispatch(self, request, *args, **kwargs):
         self.idea = Idea.objects.get(pk=kwargs['idea_pk'])
-        """
-        vote = Vote.objects.filter(idea=idea, user_key=self.user_key).first()
+        return super(IdeaMixin, self).dispatch(request, *args, **kwargs)
+    
+    def pre_process(self, request, *args, **kwargs):
+        vote = Vote.objects.filter(idea=self.idea, user_key=self.user_key).first()
         if vote:
             self.idea.user_vote = vote.vote
-        """
-        return super(IdeaMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return super(IdeaMixin, self).get_context_data(

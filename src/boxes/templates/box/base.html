@@ -43,7 +43,13 @@
     {% endfor %}
 </ul>
 {% endif %}
+{% if box.access_mode == box.ACCESS_BY_EMAIL and not user_key %}
+<div class='nothing'>
+To see the content of this box, you need to join it
+</div>
+{% else %}
 {% block box %}
 {% endblock %}
+{% endif %}
 </div>
 {% endblock %}
