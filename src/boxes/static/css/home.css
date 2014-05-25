@@ -1,3 +1,16 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(opensans300.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(opensans400.woff) format('woff');
+}
+
 
 h1, h2, h3, h4, h5, h6,body, button, input, select, textarea {
     font-family: 'Open Sans', sans-serif;

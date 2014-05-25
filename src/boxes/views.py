@@ -17,6 +17,8 @@ class HomepageView(generic.TemplateView):
         box = Box(slug=slug, name="My discussion box",
                 user_key=request.session.session_key)
         box.save()
+        messages.add_message(request, messages.SUCCESS,
+                'Box created, you can now share it:  %s' % request.build_absolute_uri(box.url()))
         return HttpResponseRedirect(box.url())
 
 home = HomepageView.as_view()
@@ -89,7 +91,7 @@ class BoxView(BoxMixin, generic.ListView):
             try:
                 key = self.box.email_register(email)
                 send_mail('kioto.io: Access code for "%s"' % self.box.name,
-                        'https://kioto.io'+ self.box.url() + "?key=" + key,
+                        request.build_absolute_uri(self.box.url() + "?key=" + key),
                         'no-reply@kioto.io', [email], fail_silently=False)
                 messages.add_message(request, messages.SUCCESS, 'Access code sent to %s' % email)
             except ValidationError as e:
