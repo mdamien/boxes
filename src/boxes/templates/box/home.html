@@ -24,19 +24,19 @@
 {% include 'box/_idea.html' %}
 {% endfor %}
 </ul>
-{% if ideas.paginator.num_pages > 1 %}
+{% if page_obj.paginator.num_pages > 1 %}
 <div class="pagination">
     <span class="step-links">
-        {% if ideas.has_previous %}
-            <a href="?page={{ ideas.previous_page_number }}">&#5176;</a>
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">&#5176;</a>
         {% endif %}
 
         <span class="current">
-            {{ ideas.number }}/{{ ideas.paginator.num_pages }}
+            {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
         </span>
 
-        {% if ideas.has_next %}
-            <a href="?page={{ ideas.next_page_number }}">&#5171;</a>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">&#5171;</a>
         {% endif %}
     </span>
 </div>

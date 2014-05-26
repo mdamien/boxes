@@ -17,11 +17,11 @@ class HomepageView(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         slug = helpers.randascii(4)
         box = Box(slug=slug, name="",
-                user_key=request.session.session_key)
+                user_key=helpers.randascii(10))
         box.save()
 #        messages.add_message(request, messages.SUCCESS,
 #                'Box created, you can now share it:  %s' % request.build_absolute_uri(box.url()))
-        return HttpResponseRedirect(reverse('boxes.views.settings', args=(box.slug,)))
+        return HttpResponseRedirect(reverse('boxes.views.settings', args=(box.slug, box.user_key)))
 
 home = HomepageView.as_view()
 
@@ -56,6 +56,7 @@ class BoxMixin:
 class BoxView(BoxMixin, generic.ListView):
     template_name = 'box/home.html'
     context_object_name = 'ideas'
+    paginate_by = 10
     
     def get_context_data(self, **kwargs):
         context = super(BoxView, self).get_context_data(
@@ -113,13 +114,7 @@ class SettingsForm(forms.ModelForm):
 
     validate_hostname = RegexValidator(regex=r'[a-zA-Z0-9-_]*\.[a-zA-Z]{2,6}',
         message="Enter a valid domain name")
-
-    def clean_email_suffix(self):
-        access_mode = self.cleaned_data['access_mode']
-        domain = super(SettingsForm, self).clean()
-        if access_mode == Box.ACCESS_BY_EMAIL:
-            self.validate_hostname(domain)
-
+    
     def clean(self):
         cleaned_data = super(SettingsForm, self).clean()
         if self.instance.access_mode != cleaned_data['access_mode'] \
@@ -132,8 +127,8 @@ class SettingsView(BoxMixin, generic.UpdateView):
     template_name = 'box/settings.html'
 
     def pre_process(self, request, *args, **kwargs):
-        if request.session.session_key != self.box.user_key:
-            return HttpResponseForbidden("You are not the owner of this box")
+        if kwargs['admin_key'] != self.box.user_key:
+            return HttpResponseForbidden("Use the admin link to access to this page")
 
     def get_object(self, queryset=None):
         return self.box
@@ -154,6 +149,7 @@ class BoxLogout(BoxMixin, generic.UpdateView):
 logout = BoxLogout.as_view()
 
 class IdeaMixin(BoxMixin):
+
     def dispatch(self, request, *args, **kwargs):
         return super(IdeaMixin, self).dispatch(request, *args, **kwargs)
     

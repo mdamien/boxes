@@ -27,7 +27,7 @@ margin-top:20px;
 {% if user_key %}
 <form class='idea-form' method='post' action=''>
     {% csrf_token %}
-    <input type='text' name='content' placeholder='Enter a comment here' />
+    <input type='text' name='content' autofocus placeholder='Enter a comment here' autocomplete='off'/>
     <input type='submit' value='post'>
 </form>
 {% endif %}
