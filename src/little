@@ -1,8 +1,3 @@
 rate limit [email] by [box|domain|hour]
-rate limit [idea|comment] by box
-rate limit [comment] by idea
-rate limit [coby user_key
-rate limit by IP
-
-AHHHH....how to be careful of spammers ?
-but not waste too much time doing it...
+rate limit [idea] by [box|user_key]
+rate limit [comment] by [idea|user_key]

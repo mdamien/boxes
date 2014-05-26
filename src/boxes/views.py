@@ -16,8 +16,7 @@ class HomepageView(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         slug = helpers.randascii(4)
-        box = Box(slug=slug, name="",
-                user_key=helpers.randascii(10))
+        box = Box(slug=slug, name="", user_key=helpers.randascii(10))
         box.save()
         return HttpResponseRedirect(reverse('boxes.views.settings', args=(box.slug, box.user_key)))
 
@@ -32,7 +31,7 @@ class BoxMixin:
         if self.box.access_mode == Box.ACCESS_BY_SESSION:
             self.user_key = request.session.session_key
         if self.box.access_mode == Box.ACCESS_BY_GOOGLE and request.user.is_authenticated():
-            self.user_key = hashlib.sha1(request.user.username.encode('utf-8'))
+            self.user_key = hashlib.sha1(request.user.username.encode('utf-8')).hexdigest()
         if self.box.access_mode == Box.ACCESS_BY_EMAIL:
             if 'key' in request.GET:
                 key = request.GET.get('key')
@@ -94,10 +93,10 @@ class BoxView(BoxMixin, generic.ListView):
             email = request.POST.get('email')
             try:
                 key = self.box.email_register(email)
-                send_mail('kioto.io: Access code for "%s"' % self.box.name,
+                send_mail('kioto.io: Access link for "%s"' % self.box.name,
                         request.build_absolute_uri(self.box.url() + "?key=" + key),
                         'no-reply@kioto.io', [email], fail_silently=False)
-                messages.add_message(request, messages.SUCCESS, 'Access code sent to %s' % email)
+                messages.add_message(request, messages.SUCCESS, 'Access link sent to %s' % email)
             except ValidationError as e:
                 messages.add_message(request, messages.ERROR, e.message)
         else:

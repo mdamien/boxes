@@ -9,6 +9,7 @@ from boxes import helpers
 class Box(models.Model):
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=300, blank=True)
+    description = models.TextField(blank=True)
 
     ACCESS_BY_SESSION = 0
     ACCESS_BY_EMAIL = 1
@@ -78,10 +79,10 @@ class Idea(models.Model):
     content = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)
     cached_score = models.IntegerField(default=0)
-    user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
+    user_key = models.CharField(max_length=40) 
 
     def color(self):
-        return helpers.color(self.user_key)
+        return helpers.color(str(self.pk)+self.user_key)
 
     def score(self):
         return self.cached_score
@@ -101,9 +102,9 @@ class Idea(models.Model):
 
     def url(self):
         return reverse('boxes.views.idea',args=(self.box.slug, self.pk,))
-    
+
     def __str__(self):
-        return self.title
+        return "[%s-%s] %s" % (self.box.slug, self.pk, self.title)
 
 class Vote(models.Model):
     idea = models.ForeignKey(Idea)
@@ -134,4 +135,4 @@ class Comment(models.Model):
         ordering = ('-date',)
 
     def __str__(self):
-        return self.content
+        return "[%s-%s] %s" % (self.idea.box.slug, self.idea.pk, self.content)
