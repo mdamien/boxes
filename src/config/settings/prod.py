@@ -10,6 +10,18 @@ USE_X_FORWARDED_HOST = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'kioto',
+        'USER': secrets.DBUSER,
+        'PASSWORD': secrets.DBPASSWORD,
+        'HOST': 'localhost',
+        'PORT': '5432',
+   }
+}
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'mail.gandi.net'

@@ -24,6 +24,7 @@ INSTALLED_APPS = (
     'boxes',
 
     'social.apps.django_app.default',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (

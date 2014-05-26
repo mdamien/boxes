@@ -1,2 +1,3 @@
 django
 python-social-auth
+django-extensions
