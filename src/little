@@ -1,15 +1,8 @@
-Post form & comment length
 rate limit [email] by [box|domain|hour]
-
-#would be nice
 rate limit [idea|comment] by box
 rate limit [comment] by idea
 rate limit [coby user_key
 rate limit by IP
-idea content
-box description
-
-
 
 AHHHH....how to be careful of spammers ?
 but not waste too much time doing it...

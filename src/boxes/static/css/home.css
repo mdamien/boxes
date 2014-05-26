@@ -1,14 +1,14 @@
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/opensans300.woff) format('woff');
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/opensans300.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(fonts/opensans400.woff) format('woff');
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url(fonts/opensans400.woff) format('woff');
 }
 
 
@@ -49,13 +49,6 @@ input[type="submit"]{
     padding: 13px 57px;
     color: #FFFFFF;
     font-weight: 300;
-}
-
-.form-wrapper {
-    /* background: #498FDD; */
-    /* color: white; */
-    /* padding-bottom: 70px; */
-    /* border-top: 10px solid #0A67CF; */
 }
 
 h3.title {
@@ -115,4 +108,10 @@ span.help {
 }
 input[type="submit"]:hover {
     background: #DF8700;
+}
+
+@media (max-width: 600px) {
+    input[type="submit"]{
+        padding: 10px 9px;
+    }
 }

@@ -10,7 +10,7 @@ box = patterns('boxes.views',
     url(r'^post/(?P<idea_pk>[0-9]+)/', include(idea)),
     url(r'new/$', 'box', {'sort':'new'}, name='list_new'),
     url(r'top/$', 'box', {'sort':'top'}, name='list_top'),
-    url(r'settings/(?P<admin_key>[0-9A-Za-z]+)$', 'settings', name='settings'),
+    url(r'settings/(?P<admin_key>[0-9A-Za-z]+)/$', 'settings', name='settings'),
     url(r'logout/$', 'logout', name='logout'),
     url(r'$', 'box',{'sort':'hot'}, name='view'),
 )

@@ -10,12 +10,12 @@ body{
 }
 
 .ideas {
-   list-style:none; 
+    list-style:none; 
 }
 
 .idea {
-   overflow: auto; 
-   list-style: none;
+    overflow: auto; 
+    list-style: none;
 }
 
 .box-name {
@@ -39,9 +39,9 @@ body{
 }
 
 .header {
-background: #498FDD;
-position: relative;
-z-index: 10;
+    background: #498FDD;
+    position: relative;
+    z-index: 10;
 }
 
 .header a {
@@ -169,16 +169,16 @@ z-index: 10;
     text-align: right;
 }
 .step-links {
-background: #498FDD;
-color: rgb(231, 231, 231);
-font-size: 14px;
-padding: 0px 6px;
-margin-right: 3px;
-display: inline-block;
-position: relative;
-border: 1px solid;
-border-color: #DBDBDB #D5D5D5 #C7C7C7;
-border-radius: 3px;
+    background: #498FDD;
+    color: rgb(231, 231, 231);
+    font-size: 14px;
+    padding: 0px 6px;
+    margin-right: 3px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid;
+    border-color: #DBDBDB #D5D5D5 #C7C7C7;
+    border-radius: 3px;
 }
 .step-links a {
     color: inherit;
@@ -205,7 +205,7 @@ border-radius: 3px;
     position: relative;
     z-index: 0;
     box-shadow: inset 0px 11px 8px -10px rgba(0, 0, 0, 0.46), 
-        inset 0px -11px 8px -10px rgba(0, 0, 0, 0.25);
+    inset 0px -11px 8px -10px rgba(0, 0, 0, 0.25);
 }
 h5 {
     color: inherit;
@@ -308,16 +308,16 @@ input[type="email"]:focus {
     background: #fff; border: 1px solid; border-color: #e5e6e9 #dfe0e4 #d0d1d5; border-radius: 3px; margin: 2px; padding: 5px 10px;
 }
 .box-link {
-background: #72A9E5;
-color: white;
-margin-left: 0px;
-display: inline-block;
-border-radius: 3px;
-padding: 2px 10px;
+    background: #72A9E5;
+    color: white;
+    margin-left: 0px;
+    display: inline-block;
+    border-radius: 3px;
+    padding: 2px 10px;
 }
 .box-link a {
-color: rgb(255, 255, 255);
-font-weight: bold;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
 }
 .share-link {
     background: #72A9E5;
@@ -332,3 +332,24 @@ font-weight: bold;
     background: #074891;
     text-decoration:none;
 }
+
+
+
+
+
+@media (max-width: 600px) {
+    .idea-form input[type="text"], .idea-form input[type="email"]{
+        width: 100%;
+
+    }
+    .idea-form {
+        width: auto;
+
+        margin: 0;
+        display: block;
+    }
+    .logo{
+        margin-left:0;
+    }
+}
+
