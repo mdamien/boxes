@@ -7,6 +7,7 @@
     <div class='row'>
     <a class='logo' href='/' title='kioto.io'>k</a>
     <a class='box-name' href='{{ box.url }}'>{{ box }}</a>
+    <a class='share-link'>Share</a>
     {% if not box.is_access_by_session and user_key %}
     <form method='post' class='logout' action='{% url 'boxes.views.logout' box.slug %}'>
         {% csrf_token %}
@@ -18,20 +19,25 @@
 {% block extra-headers %}
 {% if not user_key %}
 <div class="access-header">
-    <h5 class="row">To participate,
+    <h5 class="row"> To participate,
         {% if box.access_mode == box.ACCESS_BY_GOOGLE %}
         <a href="{% url 'social:begin' "google" %}?next={{ request.path }}">Login with Google</a>
         {% else %}
         enter your mail:
         <form action='{{ box.url }}' method='post'>
             {% csrf_token %}
-            <input type='email' name='email' value='@{{ box.email_suffix }}'/>
+            <input type='email' name='email' value='@{{ box.email_suffix }}' autofocus />
         </form>
         {% endif %}
     </h5>
 </div>
 {% endif %}
 {% endblock %}
+<div class='row'>
+    <div class='box-link' style='display:none'>
+        Share this box with this link: <a href='{{ box.url }}'>kioto.io{{ box.url }}</a>
+    </div>
+</div>
 <div class='box row'>
 {% if messages %}
 <ul class="messages">
@@ -40,7 +46,7 @@
     {% endfor %}
 </ul>
 {% endif %}
-{% if box.access_mode == box.ACCESS_BY_EMAIL and not user_key %}
+{% if not bypass_box_access and  box.access_mode == box.ACCESS_BY_EMAIL and not user_key %}
 <div class='nothing'>
 To see the content of this box, you need to join it
 </div>
@@ -49,4 +55,14 @@ To see the content of this box, you need to join it
 {% endblock %}
 {% endif %}
 </div>
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+<script>
+$('.share-link').click(function(){
+    $('.box-link').fadeToggle(100)
+})
+</script>
 {% endblock %}

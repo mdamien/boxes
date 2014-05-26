@@ -194,7 +194,7 @@ border-radius: 3px;
 }
 
 .delete-form input[type="submit"] {
-    color: #CF0029;
+    color: #FF4B46;
     border: none;
     background: none;
 }
@@ -304,3 +304,31 @@ input[type="email"]:focus {
     background: #074891;
 }
 
+.card {
+    background: #fff; border: 1px solid; border-color: #e5e6e9 #dfe0e4 #d0d1d5; border-radius: 3px; margin: 2px; padding: 5px 10px;
+}
+.box-link {
+background: #72A9E5;
+color: white;
+margin-left: 0px;
+display: inline-block;
+border-radius: 3px;
+padding: 2px 10px;
+}
+.box-link a {
+color: rgb(255, 255, 255);
+font-weight: bold;
+}
+.share-link {
+    background: #72A9E5;
+    padding: 3px 9px;
+    margin-left: 10px;
+    color: white;
+    border-radius: 3px;
+    border-radius: px;
+    cursor: pointer;
+}
+.share-link:hover{
+    background: #074891;
+    text-decoration:none;
+}

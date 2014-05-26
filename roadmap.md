@@ -3,7 +3,7 @@
 ## UX
 
 - [ ] Idea content and edit
-- [ ] Box description & link to share
+- [ ] Box description 
 
 ## Code
 
@@ -16,7 +16,6 @@
 ## A little bit of finish
 
 - [ ] Form validation and handling
-    - [ ] Settings
     - [ ] Post & Comment
 - [ ] Browser compatibility test *alarrache*
 - [ ] Usable on mobile *chezmoicafonctionne*

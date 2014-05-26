@@ -26,6 +26,8 @@ class HomepageView(generic.TemplateView):
 home = HomepageView.as_view()
 
 class BoxMixin:
+    bypass_box_access = False
+    
     def dispatch(self, request, *args, **kwargs):
         self.box = Box.objects.get(slug=kwargs['box_slug'])
         self.user_key = None
@@ -51,6 +53,7 @@ class BoxMixin:
 
     def get_context_data(self, **kwargs):
         return super(BoxMixin, self).get_context_data(
+                bypass_box_access=self.bypass_box_access,
                 user_key=self.user_key, box=self.box, **kwargs)
 
 class BoxView(BoxMixin, generic.ListView):
@@ -114,6 +117,13 @@ class SettingsForm(forms.ModelForm):
 
     validate_hostname = RegexValidator(regex=r'[a-zA-Z0-9-_]*\.[a-zA-Z]{2,6}',
         message="Enter a valid domain name")
+
+    def clean_email_suffix(self):
+        email_mode = self.cleaned_data['access_mode'] == Box.ACCESS_BY_EMAIL
+        domain = self.cleaned_data['email_suffix']
+        if email_mode:
+            self.validate_hostname(domain)
+        return domain
     
     def clean(self):
         cleaned_data = super(SettingsForm, self).clean()
@@ -125,6 +135,7 @@ class SettingsForm(forms.ModelForm):
 class SettingsView(BoxMixin, generic.UpdateView):
     form_class = SettingsForm
     template_name = 'box/settings.html'
+    bypass_box_access = True
 
     def pre_process(self, request, *args, **kwargs):
         if kwargs['admin_key'] != self.box.user_key:

@@ -7,34 +7,47 @@
 {% endblock %}
 
 {% block box %}
-<div class='settings'>
+<div class='settings card'>
     <h3>Box settings</h3>
     <form  method="post" action="">
-        {{ form.errors }}
         {% csrf_token %}
+        {{ form.non_field_errors }}
         <p>
-        <label for="id_name">Name:</label> <input id="id_name" autofocus maxlength="300" name="name" type="text" value="{{ box.name }}">
+            {{ form.name.errors }}
+            <label for="id_name">Name:</label>
+            {{ form.name }}
         </p>
         <p>
+            {{ form.access_mode.errors }}
             <label for="id_access_mode">How people can participate ?</label>
-        <input type='hidden' name='access_mode' value='{{ box.access_mode }}' />
-        <div class="access_mode_choices">
-            <div data-value="0" {% if box.access_mode == 0 %}class='selected'{% endif %}>
-                <strong>No restriction</strong>
-                <em>Anyone can participate without any authentification</em>
-            </div><div data-value="2" {% if box.access_mode == 2 %}class='selected'{% endif %} >
-                <strong>Require google account</strong>
-                <em>To save you from spam</em>
+            <input type='hidden' name='access_mode' value='{{ form.access_mode.value }}' />
+            <div class="access_mode_choices">
+                <div data-value="{{ box.ACCESS_BY_SESSION }}">
+                    <strong>No restriction</strong>
+                    <em>Anyone can participate without any authentification</em>
+                </div>
+                <div data-value="{{ box.ACCESS_BY_GOOGLE }}">
+                    <strong>Require google account</strong>
+                    <em>To save you from spam</em>
+                </div>
+                <div data-value="{{ box.ACCESS_BY_EMAIL }}">
+                    <strong>Require signup via email from specific domain</strong>
+                    <em>Example: @stanford.edu or @apple.com</em>
+                </div>
             </div>
-            <div data-value="1" {% if box.access_mode == 1 %}class='selected'{% endif %}>
-                <strong>Require signup via email from specific domain</strong>
-                <em>Example: @stanford.edu or @apple.com</em>
-            </div>
-
-        </div></p>
-        <p class='email_suffix_box'  {% if box.access_mode != 1 %}style='display:none'{% endif %} ><label for="id_email_suffix">Email domain:</label> <input id="id_email_suffix" maxlength="100" placeholder='your-domain.com' name="email_suffix" type="text" value="{% if box.email_suffix %}{{box.email_suffix}}{% endif %}"></p>
+            <p class='email_suffix_box'
+                {% if box.access_mode != box.ACCESS_BY_EMAIL %} style='display:none'{% endif %} >
+                {{ form.email_suffix.errors }}
+                <label for="id_email_suffix">Email domain:</label>
+                <span class="at">@</span>
+                {{ form.email_suffix }}
+            </p>
+        </p>
         <input type="submit" value="Save">
     </form>
+</div>
+<div class='admin-link card'>
+    To access this page again, keep this link: <a href='{% url 'boxes.views.settings' box.slug box.user_key %}'>kioto.io{% url 'boxes.views.settings' box.slug box.user_key %}</a>
 </div>
 {% endblock %}
 
@@ -43,15 +56,16 @@
 <script>
 $('.access_mode_choices > div').off();
 $('.access_mode_choices > div').click(function(e){
-    $('.access_mode_choices > div').removeClass('selected');
-    $(this).addClass('selected')
-    var value = $(this).attr('data-value');
-    $('input[name="access_mode"]').attr('value',value)
-    if(value == '1'){
+        $('.access_mode_choices > div').removeClass('selected');
+        $(this).addClass('selected')
+        var value = $(this).attr('data-value');
+        $('input[name="access_mode"]').attr('value',value)
+        if(value == '{{ box.ACCESS_BY_EMAIL }}'){
         $('.email_suffix_box').show()
-    }else{
+        }else{
         $('.email_suffix_box').hide()
-    }
-})
+        }
+        })
+$('div[data-value="{{ form.access_mode.value }}"]').click()
 </script>
 {% endblock %}
