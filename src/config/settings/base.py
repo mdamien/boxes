@@ -81,6 +81,13 @@ STATICFILES_FINDERS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOpenId',
+    'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+try:
+    import config.settings.secrets as secrets
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+except ImportError:
+    logger.warning("Google login won't work")
