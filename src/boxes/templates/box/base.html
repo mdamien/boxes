@@ -21,7 +21,7 @@
 <div class="access-header">
     <h5 class="row"> To participate,
         {% if box.access_mode == box.ACCESS_BY_GOOGLE %}
-        <a href="{% url 'social:begin' "google" %}?next={{ request.path }}">Login with Google</a>
+        <a href="{% url 'social:begin' "google-oauth2" %}?next={{ request.path }}">Login with Google</a>
         {% else %}
         enter your mail:
         <form action='{{ box.url }}' method='post'>

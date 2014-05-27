@@ -1,6 +1,5 @@
 # Big Things to do
 
-- [ ] Google OpenID -> OAuth2
 - [ ] Idea content and edit
 - [ ] Box description 
 - [ ] Comments tree 
@@ -11,3 +10,10 @@
 ## Code
 
 - [ ] Add real testing suite
+
+# Big concepts to solve
+
+- [ ] Moderation tools
+- [ ] Constructive discussion
+- [ ] Minimal trust in the website
+- [ ] Spam/abuse protection
