@@ -1,18 +1,13 @@
 # Big Things to do
 
-## UX
-
+- [ ] Google OpenID -> OAuth2
 - [ ] Idea content and edit
 - [ ] Box description 
 - [ ] Comments tree 
-
-## Code
-
-- [ ] Add real testing suite
-
-## A little bit of finish
-
 - [ ] Post & Comment validation
 - [ ] Rate-limitation
 - [ ] 404/503
 
+## Code
+
+- [ ] Add real testing suite
