@@ -1,3 +1,4 @@
 django
 python-social-auth
 django-extensions
+django_compressor

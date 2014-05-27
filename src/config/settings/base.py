@@ -23,6 +23,8 @@ INSTALLED_APPS = (
 
     'boxes',
 
+    'compressor',
+
     'social.apps.django_app.default',
     'django_extensions',
 )
@@ -72,6 +74,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = join(PROJECT_DIR,'static')
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOpenId',

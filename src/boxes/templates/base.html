@@ -1,21 +1,25 @@
 {% load static %}
+{% load compress %}
 
 <html>
 <head>
     <meta charset="utf-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{% static 'favicon.png' %}" />
     <title>{% block title %}kioto.io{% endblock %}</title>
+    {% compress css %}
     {% block css %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/box.css' %}">
     {% endblock %}
+    {% endcompress %}
 </head>
 <body>
     {% block content %}{% endblock %}
+    {% compress js %}
     {% block js %}
     <script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
     {% endblock %}
+    {% endcompress %}
 </body>
 </html>
