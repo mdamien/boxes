@@ -1,7 +1,8 @@
 <li class='idea' id='idea-{{idea.pk}}'
     style='border-left-color: hsla({{ idea.color }},90%,55%,1)' >
     <div class='vote-box'>
-        <a onclick="vote('up',{{ idea.pk }},'{% url 'boxes.views.idea_vote' box.slug idea.pk 'up' %}')" class='vote-up
+        <a onclick="vote('up',{{ idea.pk }},'{% url 'boxes.views.idea_vote' box.slug idea.pk 'up' %}',
+            '{% url 'boxes.views.idea_vote' box.slug idea.pk 'remove' %}')" class='vote-up
             {% if idea.user_vote == 1 %}current-vote{% endif %}'
             >&#9650;</a>
         <span class='score'>{{ idea.score }}</span>{{ idea.user_vote.vote }}

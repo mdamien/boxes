@@ -82,7 +82,7 @@ class Idea(models.Model):
     user_key = models.CharField(max_length=40) 
 
     def color(self):
-        return helpers.color(str(self.pk)+self.user_key)
+        return helpers.color(self.box_id, self.user_key)
 
     def score(self):
         return self.cached_score
@@ -119,7 +119,7 @@ class Vote(models.Model):
     user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
 
     def from_str(vote):
-        return {'up':1,'down':-1}.get(vote)
+        return {'up':1,'remove':0, 'down':-1}.get(vote)
 
 
 class Comment(models.Model):
@@ -129,7 +129,7 @@ class Comment(models.Model):
     user_key = models.CharField(max_length=40) #session_key, email_key, user_id 
 
     def color(self):
-        return helpers.color(self.user_key)
+        return helpers.color(self.idea_id, self.user_key)
 
     class Meta:
         ordering = ('-date',)

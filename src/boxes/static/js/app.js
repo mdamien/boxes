@@ -42,12 +42,18 @@ $.ajaxSetup({
     }
 });
 
-function vote(type, idea_pk, url){
-    $.post(url, function(data){
-        $idea = $('#idea-'+idea_pk)
+function vote(type, idea_pk, url, remove_url){
+    var remove_vote = false
+    $idea = $('#idea-'+idea_pk)
+    if($idea.find('.vote-'+type).hasClass('current-vote')){
+        remove_vote = true
+    }
+    $.post(remove_vote ? remove_url : url, function(data){
         $idea.find('.vote-up').removeClass('current-vote')
         $idea.find('.vote-down').removeClass('current-vote')
-        $idea.find('.vote-'+type).addClass('current-vote')
+        if(!remove_vote){
+            $idea.find('.vote-'+type).addClass('current-vote')
+        }
         $idea.find('.score').html(data)
     })
 }

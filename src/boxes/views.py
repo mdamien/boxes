@@ -191,10 +191,12 @@ class IdeaVote(IdeaMixin, generic.View):
             current_vote.delete()
         except Vote.DoesNotExist:
             pass
-        vote = Vote(idea=self.idea,
-                user_key=self.user_key,
-                vote=Vote.from_str(kwargs['vote']))
-        vote.save()
+        vote_value = Vote.from_str(kwargs['vote'])
+        if vote_value != 0:
+            vote = Vote(idea=self.idea,
+                    user_key=self.user_key,
+                    vote=Vote.from_str(kwargs['vote']))
+            vote.save()
         self.idea.update_cached_score()
         return HttpResponse(str(self.idea.score()))
 

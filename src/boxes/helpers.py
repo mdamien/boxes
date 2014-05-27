@@ -21,8 +21,9 @@ def hot_score(score, date):
     seconds = epoch_seconds(date) - 1134028003
     return round(order + sign * seconds / 45000, 7)
 
-def color(seed):
+def color(*seeds):
     """Return a random hue associated with the seed"""
+    seed = ''.join(str(seed) for seed in seeds)
     rand = random.Random(seed)
     return int(rand.random()*255)
 
