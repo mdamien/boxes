@@ -19,19 +19,19 @@
         </p>
         <p>
             {{ form.access_mode.errors }}
-            <label for="id_access_mode">How people can participate ?</label>
+            <label for="id_access_mode">How can people participate?</label>
             <input type='hidden' name='access_mode' value='{{ form.access_mode.value }}' />
             <div class="access_mode_choices">
                 <div data-value="{{ box.ACCESS_BY_SESSION }}">
-                    <strong>No restriction</strong>
-                    <em>Anyone can participate without any authentification</em>
+                    <strong>No restrictions</strong>
+                    <em>Anyone can participate without any authentication</em>
                 </div>
                 <div data-value="{{ box.ACCESS_BY_GOOGLE }}">
-                    <strong>Require google account</strong>
-                    <em>To save you from spam</em>
+                    <strong>Require a Google account</strong>
+                    <em>To prevent (most) spam</em>
                 </div>
                 <div data-value="{{ box.ACCESS_BY_EMAIL }}">
-                    <strong>Require signup via email from specific domain</strong>
+                    <strong>Require signup via email using a specific domain</strong>
                     <em>Example: @stanford.edu or @apple.com</em>
                 </div>
             </div>
