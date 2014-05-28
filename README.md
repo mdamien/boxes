@@ -4,7 +4,7 @@ Boxes [![Build Status](https://travis-ci.org/MDamien/boxes.png?branch=master)](h
 **Use-cases**
 
 - Questions during a conference
-- Brainstorming anonymously inside your company
+- Brainstorming anonymously within your company
 - Honest feedback on your idea/product
 - School-wide decision making
 - Have political discussions with your friends
@@ -17,7 +17,7 @@ Boxes [![Build Status](https://travis-ci.org/MDamien/boxes.png?branch=master)](h
     python manage.py syncdb
     python manage.py runserver
 
-Note: **Require Python 3**
+Note: **Requires Python 3**
 
 ### Secrets
 
