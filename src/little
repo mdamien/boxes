@@ -1,3 +1,0 @@
-rate limit [email] by [box|domain|hour]
-rate limit [idea] by [box|user_key]
-rate limit [comment] by [idea|user_key]

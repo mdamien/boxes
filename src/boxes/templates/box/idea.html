@@ -24,7 +24,7 @@ margin-top:20px;
 </style>
 {% include 'box/_idea.html' with full=True %}
 <h5>Comments</h5>
-{% if user_key %}
+{% if box.is_access_by_session or user_key %}
 <form class='idea-form' method='post' action=''>
     {% csrf_token %}
     <input type='text' name='content' autofocus placeholder='Enter a comment here' autocomplete='off'/>

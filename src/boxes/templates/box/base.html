@@ -17,7 +17,7 @@
     </div>
 </div>
 {% block extra-headers %}
-{% if not user_key %}
+{% if not box.is_access_by_session and not user_key %}
 <div class="access-header">
     <h5 class="row"> To participate,
         {% if box.access_mode == box.ACCESS_BY_GOOGLE %}

@@ -1,7 +1,7 @@
 {% extends 'box/base.html' %}
 
 {% block box %}
-{% if user_key %}
+{% if box.access_mode == box.ACCESS_BY_SESSION or user_key %}
 <form class='idea-form' method='post' action=''>
     {% csrf_token %}
     <input type='text' name='title' autofocus placeholder='Enter a new post here' autocomplete="off" />
