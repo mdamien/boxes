@@ -1,6 +1,5 @@
 # Big Things to do for release 1
 
-- [ ] Show clearly uses-cases on homescreen
 - [ ] Idea content and edit
 - [ ] Box description 
 - [ ] Comments
@@ -24,5 +23,4 @@
 #### Notes
 
 - URL with sluggify for ideas
-- Migrate the `Idea` terminology to the `Submission` one
-
+- Find better concept that `Idea` (merge `Idea` and `Comment` ?)
