@@ -115,3 +115,37 @@ input[type="submit"]:hover {
         padding: 10px 9px;
     }
 }
+
+
+.examples img {
+    float: left;
+    width: 200px;
+    border: 1px solid rgb(205, 205, 205);
+    border-bottom-color: rgb(173, 173, 173);
+    border-top-color: rgb(217, 217, 217);
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgb(216, 216, 216);
+}
+.examples {
+    max-width: 870px;
+    margin: auto;
+    padding: 21px;
+    margin-top: 90px;
+}
+.examples h3 {
+    font-size: 1.6rem;
+}
+
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+
+.cf:after {
+    clear: both;
+}
+.examples h3, .examples ul {
+    padding-left: 220px;
+}
+

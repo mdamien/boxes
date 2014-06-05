@@ -60,3 +60,6 @@ font-size: 1.5rem;
 
 
 }
+input#id_name {
+    width: 70%;
+}

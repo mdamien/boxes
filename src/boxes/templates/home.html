@@ -8,17 +8,44 @@
 
 {% block content %}
 <div class='form-wrapper'>
-<form method='post' action='' class='new-box row'>
+<form method='post' action='' class='new-box'>
     <h3 class='title'>Discuss <span class='X'>anything</span> with <span class='Y'>any group</span></h3>
 {% csrf_token %}
 <input type='submit' value='Create a discussion box'/>
 </form>
 </div>
 
-<div class='marketing row'>
+<div class='examples'>
+    <h4>A box is an anonymous discussion place, you can use it to:</h4>
+    <div class='cf'>
+        <img src='{% static 'img/example_brainstorming.png' %}' />
+        <h3>Brainstorm in your startup</h3>
+        <ul>
+            <li>Get an overview of everyone opinions quickly</li>
+            <li>Allow controversial ideas to be proposed</li>
+            <li>Less influence from the management, everyone have the same voice</li>
+        </ul>
+    </div>
+    <div class='cf'>
+        <img src='{% static 'img/example_school.png' %}' />
+        <h3>Discuss with schoolmates</h3>
+        <ul>
+            <li>Be free to ask for help</li>
+            <li>Reserved only to people part of the school</li>
+            <li>No more social pressure to voice your opinion</li>
+        </ul>
+    </div>
+    <div class='cf'>
+        <img src='{% static 'img/example_conference.png' %}' />
+        <h3>Ask questions during a conference</h3>
+        <ul>
+            <li>The best questions get answered</li>
+            <li>Shy persons can ask question</li>
+            <li>No more fear to ask a dumb question to your hero</li>
+        </ul>
+    </div>
 </div>
 {% endblock %}
-
 
 {% block js %}
 {{ block.super }}
