@@ -1,0 +1,42 @@
+I'm trying to **make people able to express their voice freely and equally** in a community.
+
+Example:
+
+- Point out wrongdoing in the company ( corruption, harrasment,...)  by a janitor as much than by a CEO. And no risk to be fired
+- Make decisions in your school ( funding, directions, rules,... ) by everyone be it a teacher or a student
+
+What do I mean by community ?
+
+It can be a explicit set of people:
+
+- Company employees
+- School students
+- Citizens of a country
+- People on a mailing-list (core devs, board of directors, ...)
+
+Or an inexplicit set of people:
+
+- friends of somebody (the more people share the box, the more it won't be true)
+- people concerned by an issue
+- anybody in the planet (planet-wide voting)
+
+---------------------------------------------------------------
+
+**Solution: An anonymous user-curated discussion forum**
+
+How to only include a **certain set of people** ?
+
+- email/domain whitelist
+- third-party login
+
+How to include them **only once** ?
+
+- distribute access token and put them on a blacklist
+
+---------------------------------------------------------------
+
+**What should I provide ?**
+
+
+
+

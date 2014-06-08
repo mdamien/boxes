@@ -17,5 +17,5 @@ box = patterns('boxes.views',
 
 urlpatterns = patterns('boxes.views',
     url(r'^$', 'home', name='homepage'),
-    url(r'^box/(?P<box_slug>[0-9A-Za-z]+)/', include(box)),
+    url(r'^(?P<box_slug>[0-9A-Za-z-_]+)/', include(box)),
 )
