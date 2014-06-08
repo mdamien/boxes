@@ -10,8 +10,6 @@ class Command(BaseCommand):
     help = 'Load sears shops'
 
     def handle(self, *args, **options):
-        Box.objects.all().delete()
-
         raw = json.load(open(os.path.join(DIR,'edmunds.json')))
         stores = raw['dealerHolder']
 
