@@ -1,4 +1,4 @@
-Boxes [![Build Status](https://travis-ci.org/MDamien/boxes.png?branch=master)](https://travis-ci.org/MDamien/boxes)
+Boxes [![Build Status](https://api.travis-ci.org/mdamien/boxes.png)](https://travis-ci.org/MDamien/boxes)
 =======
 
 **Use-cases**
