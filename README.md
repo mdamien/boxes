@@ -1,6 +1,8 @@
 Boxes [![Build Status](https://api.travis-ci.org/mdamien/boxes.png)](https://travis-ci.org/MDamien/boxes)
 =======
 
+NOTE: Abandonned project from 2014
+
 **Use-cases**
 
 - Questions during a conference
@@ -8,8 +10,6 @@ Boxes [![Build Status](https://api.travis-ci.org/mdamien/boxes.png)](https://tra
 - Honest feedback on your idea/product
 - School-wide decision making
 - Have political discussions with your friends
-
-*More details coming soon*
 
 ### Install
 
@@ -22,4 +22,8 @@ Note: **Requires Python 3**
 ### Secrets
 
 Secrets are put in `config/settings/secrets.py`
+
+### Screenshot
+
+![alt tag](https://github.com/mdamien/boxes/screenshot.png)
 
