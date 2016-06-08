@@ -25,5 +25,5 @@ Secrets are put in `config/settings/secrets.py`
 
 ### Screenshot
 
-![alt tag](https://github.com/mdamien/boxes/screenshot.png)
+![alt tag](https://raw.githubusercontent.com/mdamien/boxes/master/screenshot.png)
 
