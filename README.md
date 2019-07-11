@@ -1,7 +1,7 @@
 Boxes [![Build Status](https://api.travis-ci.org/mdamien/boxes.png)](https://travis-ci.org/MDamien/boxes)
 =======
 
-NOTE: Abandonned project from 2014
+NOTE: Abandoned project from 2014
 
 **Use-cases**
 
